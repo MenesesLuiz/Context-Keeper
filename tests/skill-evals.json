@@ -4,19 +4,25 @@
     {
       "id": 1,
       "prompt": "oi, eu uso o claude pra faculdade e pro meu tcc e toda vez tenho que explicar tudo de novo. vi falar de segundo cerebro, da pra fazer um pra mim? nao entendo muito de programacao",
-      "expected_output": "Oferece o caminho rápido, faz poucas perguntas em linguagem simples, apresenta um plano com opções e espera a escolha antes de criar qualquer arquivo.",
+      "expected_output": "Conducts the interview in Portuguese, offers the quick path, asks few questions in plain language, recommends a plain folder over Obsidian, presents a plan with options and waits for the choice before creating any file. Uses pt-BR names (CEREBRO.md, AGORA.md).",
       "files": []
     },
     {
       "id": 2,
       "prompt": "Sou dev, uso Claude Code o dia todo em uns 4 repos diferentes. Quero um second brain em ~/brain que o Claude carregue sozinho em qualquer projeto e que não perca o contexto quando compacta. Pode ir no nível mais automático.",
-      "expected_output": "Plano com nível 3, lista exata de arquivos fora do cérebro (CLAUDE.md global e settings.json, com backup), hooks instalados por merge e testados, Indice.md semeado para os 4 repos.",
+      "expected_output": "Plan with level 3, exact list of files outside the brain (pointer ~/.context-keeper/config and global CLAUDE.md with backup; no settings.json edit when installed as a plugin), hooks tested, an index note seeded for each of the 4 repositories.",
       "files": []
     },
     {
       "id": 3,
       "prompt": "tenho um vault do obsidian em D:/Vault com umas 800 notas de anos. quero que a IA passe a usar isso mas sem virar bagunça",
-      "expected_output": "Faz inventário sem alterar nada, propõe triagem (trazer/resumir/apontar/deixar de fora) em tabela e só importa após aprovação, sem mover a fonte original.",
+      "expected_output": "Takes an inventory without changing anything, proposes a triage (bring/summarize/link/leave out) as a table, converts wikilinks to regular links if that style is chosen, and imports only after approval without moving the original source.",
+      "files": []
+    },
+    {
+      "id": 4,
+      "prompt": "I'm a freelance designer juggling 6 clients and I use Claude Desktop and Cursor. Every new chat I have to re-explain who the client is and what we agreed. Can you set up some kind of memory for me? Keep it simple, I don't code.",
+      "expected_output": "Conducts the interview in English with plain language, recommends the plain folder, explains that Claude Desktop and Cursor reach level 2 at most and what the user must paste manually, uses English names (BRAIN.md, NOW.md), no emojis, and waits for plan approval.",
       "files": []
     }
   ]

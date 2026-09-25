@@ -21,6 +21,7 @@ Guardar o que não cabe no código nem no histórico de conversas: decisões e s
 - **Datas absolutas:** sempre `AAAA-MM-DD`.
 - **O cérebro guarda o porquê;** o código e o git guardam o como.
 - **Nunca registrar segredos** (senhas, tokens, chaves). Se aparecer um, avisar {{NOME}}.
+- **Texto simples, sem emojis**, nas notas e nos avisos de registro.
 
 ## 2. Regras de conduta
 
@@ -44,8 +45,18 @@ Preferências detalhadas: [Preferências](Perfil/Preferencias.md).
 
 ## 4. Mapa
 
+<!-- A skill ajusta a árvore à estrutura escolhida (Por assunto ou PARA) e remove o que não existir. -->
 ```
-{{ARVORE_DE_PASTAS}}
+CEREBRO.md        regras e mapa (este arquivo)
+AGORA.md          foco atual, pendências, últimas decisões
+Perfil/           Sobre-mim.md, Preferencias.md
+Projetos/<Nome>/  Indice.md (Estado atual) + Decisoes/
+Pesquisa/         estudos úteis para mais de um projeto
+Inbox/            capturas rápidas ainda não classificadas
+Diario/           AAAA-MM-DD.md, uma entrada por sessão relevante
+Templates/        modelos de nota
+Arquivo/          o que foi concluído ou abandonado
+.context-keeper/  configuração e estado dos hooks
 ```
 
 Convenções: nomes de arquivo sem acento e com hífen (`Visao-Geral.md`); {{CONVENCAO_DE_LINKS}}; frontmatter no topo de cada nota:
@@ -80,7 +91,7 @@ Não registrar: o que já está no código/git, transcrições, informação que
 **Autonomia:** {{AUTONOMIA}}
 <!-- Uma destas:
 - Perguntar antes de escrever qualquer nota.
-- Escrever e avisar em uma linha no fim da resposta: "🧠 Registrado: <o quê> em <onde>".
+- Escrever e avisar em uma linha no fim da resposta: "Registrado: <o quê> em <onde>".
 - Escrever sem avisar e listar tudo só no checkpoint.
 -->
 

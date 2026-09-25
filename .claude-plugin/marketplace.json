@@ -1,6 +1,6 @@
 {
   "name": "context-keeper",
-  "description": "Segundo cérebro local para IA que se alimenta sozinho.",
+  "description": "A local second brain for AI that feeds itself.",
   "owner": {
     "name": "MenesesLuiz"
   },
@@ -8,7 +8,7 @@
     {
       "name": "context-keeper",
       "source": "./",
-      "description": "Entrevista você, propõe um plano e monta um segundo cérebro em Markdown que o Claude carrega e alimenta sozinho, sem perder contexto entre sessões e compactações."
+      "description": "Interviews you, proposes a plan and builds a Markdown second brain that Claude loads and feeds on its own, so context survives across sessions and compactions."
     }
   ]
 }

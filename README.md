@@ -1,100 +1,104 @@
-# 🧠 context-keeper — Segundo Cérebro para IA
+# Context Keeper
 
-> Uma skill que monta, na sua máquina, um segundo cérebro **feito para a IA** — e que se alimenta sozinho.
+Leia em português: [README.pt-BR.md](README.pt-BR.md)
 
-Toda IA esquece. Depois de muitas mensagens, o contexto é compactado e os detalhes somem. Numa conversa nova, você explica tudo de novo. Muita gente tenta resolver isso com Obsidian ou Notion, mas eles foram feitos para **humanos** navegarem: a IA não sabe que o vault existe, não sabe o que ler primeiro e não sabe quando deve escrever.
+> A Claude Code plugin that builds a local second brain **made for AI** on your machine — and keeps it fed on its own.
 
-Esta skill resolve isso. Ela entrevista você, propõe um plano (**você escolhe**) e monta:
+Every AI forgets. After many messages the context gets compacted and details disappear. In a new conversation you explain everything again. Many people try to fix this with Obsidian or Notion, but those were made for **humans** to browse: the AI does not know the vault exists, does not know what to read first and does not know when to write.
 
-- **Um ponto de entrada** que a IA carrega em toda sessão, em qualquer pasta.
-- **Regras de alimentação**: a IA registra decisões, estado dos projetos, descobertas e as suas preferências sem você precisar pedir.
-- **Automação** (Claude Code): o contexto é reinjetado logo após cada compactação, e a IA é lembrada de fazer um *checkpoint* quando a conversa fica longa.
+Context Keeper fixes that. It interviews you, proposes a plan (**you choose**) and builds:
 
-Tudo em Markdown puro, numa pasta comum do seu computador.
+- **An entry point** the AI loads in every session, in any folder.
+- **Feeding rules**: the AI records decisions, project state, discoveries and your preferences without you having to ask.
+- **Automation** (Claude Code): context is reloaded right after every compaction, and the AI is reminded to run a *checkpoint* when the conversation gets long.
 
-### E o Obsidian?
+Everything is plain Markdown in a regular folder on your computer.
 
-Não é necessário. A IA lê e escreve os arquivos direto do disco e não abre o Obsidian como uma pessoa faria, então para ela o Obsidian não muda nada. Por isso o padrão recomendado é **uma pasta simples**. Se você gosta do Obsidian para navegar pelas notas, a skill oferece essa opção e explica como configurar. Também dá para abrir a pasta no Obsidian depois, a qualquer momento.
+### What about Obsidian?
 
-## Como funciona
+You don't need it. The AI reads and writes the files straight from disk and does not open Obsidian the way a person does, so for the AI Obsidian changes nothing. That is why the recommended default is **a plain folder**. If you like Obsidian for browsing your notes, the skill offers that option and explains how to set it up — and you can open the folder in Obsidian later, at any time.
+
+## How it works
 
 ```
-         toda sessão                ao entrar num assunto          só quando precisa
-   ┌──────────────────────┐      ┌───────────────────────┐     ┌──────────────────────┐
-   │  QUENTE  (~2k tokens)│ ───▶ │  MORNA                │ ──▶ │  FRIA                │
-   │  CEREBRO.md  regras  │      │  Projetos/X/Indice.md │     │  Decisoes/, Pesquisa/│
-   │  AGORA.md    estado  │      │  "Estado atual"       │     │  Diario/, Arquivo/   │
-   └──────────────────────┘      └───────────────────────┘     └──────────────────────┘
-            ▲                                                             │
-            └────────────── checkpoint: a IA atualiza as notas ◀──────────┘
+      every session              when a subject comes up          only when needed
+ +------------------------+    +-------------------------+    +-----------------------+
+ | HOT   (~2k tokens)     | -> | WARM                    | -> | COLD                  |
+ | BRAIN.md  rules        |    | Projects/X/Index.md     |    | Decisions/, Research/ |
+ | NOW.md    state        |    | "Current state"         |    | Journal/, Archive/    |
+ +------------------------+    +-------------------------+    +-----------------------+
+            ^                                                              |
+            +--------------- checkpoint: the AI updates the notes <--------+
 ```
 
-| Nível | O que faz | Ferramentas |
+| Level | What it does | Tools |
 |---|---|---|
-| 1 · Manual | Estrutura + regras. A IA usa o cérebro quando você pede. | Qualquer uma |
-| 2 · Conectado | A IA carrega o cérebro sozinha em toda sessão e segue o protocolo de alimentação. | Claude Code, Codex, Gemini CLI, Cursor, Claude Desktop |
-| 3 · Automático | + contexto reinjetado após compactação + pedido automático de checkpoint. | Claude Code |
+| 1 Manual | Structure and rules. The AI uses the brain when you ask. | Any |
+| 2 Connected | The AI loads the brain on its own in every session and follows the feeding rules. | Claude Code, Codex, Gemini CLI, Cursor, Claude Desktop |
+| 3 Automatic | Level 2, plus context reloaded after compaction and automatic checkpoint requests. | Claude Code |
 
-## Instalação
+## Installation
 
-**Claude Code (recomendado: como plugin).** Numa sessão do Claude Code:
+**Claude Code (recommended: as a plugin).** In a Claude Code session:
 
 ```
 /plugin marketplace add MenesesLuiz/Context-Keeper
 /plugin install context-keeper@context-keeper
 ```
 
-O plugin traz a skill, os atalhos `/context-keeper:checkpoint` e `/context-keeper:review` e os hooks de automação. Os hooks ficam inativos até você criar o seu cérebro.
+The plugin ships the skill, the `/context-keeper:checkpoint` and `/context-keeper:review` commands and the automation hooks. The hooks stay inactive until you create your brain.
 
-**Claude Code (como skill avulsa).** Copie `skills/context-keeper/` para `~/.claude/skills/`. Tudo funciona, mas a automação do nível 3 exige que a skill edite o seu `~/.claude/settings.json` (com backup).
+**Claude Code (as a standalone skill).** Copy `skills/context-keeper/` into `~/.claude/skills/`. Everything works, but level 3 automation requires the skill to edit your `~/.claude/settings.json` (with a backup).
 
-**Claude.ai / Claude Desktop.** Compacte a pasta `skills/context-keeper/` em `.zip` e envie em *Configurações → Capacidades → Skills*. Nesses apps não há hooks: o cérebro funciona até o nível 2.
+**Claude.ai / Claude Desktop.** Zip the `skills/context-keeper/` folder and upload it under *Settings → Capabilities → Skills*. These apps have no hooks, so the brain works up to level 2.
 
-## Uso
+## Usage
 
-Numa conversa, diga algo como:
+In a conversation, say something like:
 
-- *"Quero montar um segundo cérebro para você não esquecer das coisas."*
-- *"Salva no cérebro o que a gente decidiu hoje."*
-- *"Importa meu vault do Obsidian para o cérebro."*
-- *"Revisa meu segundo cérebro."*
+- *"I want to set up a second brain so you stop forgetting things."*
+- *"Save what we decided today to the brain."*
+- *"Import my Obsidian vault into the brain."*
+- *"Review my second brain."*
 
-## O que é criado
+The skill works in English and Portuguese. Brains in Portuguese use Portuguese file names (`CEREBRO.md`, `AGORA.md`, `Diario/`).
 
-```
-SegundoCerebro/
-├── CEREBRO.md        regras, mapa e protocolo de alimentação
-├── AGORA.md          foco atual, pendências, últimas decisões
-├── Perfil/           quem você é e como gosta que a IA trabalhe
-├── Projetos/<X>/     Indice.md (Estado atual) + Decisoes/
-├── Inbox/            capturas rápidas
-├── Diario/           uma entrada por sessão relevante
-├── Templates/        modelos de nota
-├── Arquivo/          o que foi concluído (nada é apagado)
-└── .context-keeper/  config, estado dos hooks
-```
-
-## Privacidade
-
-Tudo fica **no seu computador**. A skill não envia nada para lugar nenhum, faz backup de qualquer arquivo de configuração antes de alterá-lo e orienta a IA a **nunca** registrar senhas, tokens ou chaves. Se você versionar o cérebro com git, use um repositório **privado**.
-
-## Estrutura do repositório
+## What gets created
 
 ```
-.claude-plugin/              plugin.json e marketplace.json
+SecondBrain/
+├── BRAIN.md          rules, map and feeding protocol
+├── NOW.md            current focus, open items, latest decisions
+├── Profile/          who you are and how you like the AI to work
+├── Projects/<X>/     Index.md (Current state) + Decisions/
+├── Inbox/            quick captures
+├── Journal/          one entry per relevant session
+├── Templates/        note templates
+├── Archive/          finished work (nothing is deleted)
+└── .context-keeper/  config and hook state
+```
+
+## Privacy
+
+Everything stays **on your computer**. The skill sends nothing anywhere, backs up any configuration file before changing it and tells the AI to **never** record passwords, tokens or keys. If you version your brain with git, use a **private** repository.
+
+## Repository layout
+
+```
+.claude-plugin/              plugin.json and marketplace.json
 skills/context-keeper/
-├── SKILL.md                 fluxo principal e modos
-├── references/              entrevista, arquiteturas, plano, integrações, alimentação, importação, manutenção
-├── assets/templates/        modelos dos arquivos do cérebro
-├── assets/hooks/            hooks para quem instala como skill avulsa
+├── SKILL.md                 main flow and modes
+├── references/              interview, architectures, integrations, feeding protocol, importing, maintenance
+├── assets/templates/        brain files, in pt-BR/ and en/
+├── assets/hooks/            hooks for standalone installs
 └── scripts/                 lib.sh, session-start.sh, checkpoint-stop.sh, brain-lint.sh
-hooks/hooks.json             hooks do plugin (SessionStart e Stop)
-commands/                    /context-keeper:checkpoint e /context-keeper:review
-tests/skill-evals.json       cenários de teste da skill
+hooks/hooks.json             plugin hooks (SessionStart and Stop)
+commands/                    /context-keeper:checkpoint and /context-keeper:review
+tests/skill-evals.json       test scenarios for the skill
 ```
 
-## Licença
+## License
 
 [MIT](LICENSE)
 
-Veja o [ROADMAP.md](ROADMAP.md) para o que vem a seguir.
+See the [ROADMAP.md](ROADMAP.md) for what comes next.

@@ -1,165 +1,123 @@
 ---
 name: context-keeper
-description: Monta, alimenta e mantém um "segundo cérebro" local para a IA — uma pasta de notas Markdown que a IA lê no início de cada sessão e atualiza sozinha, para não perder contexto entre conversas nem depois de compactações. Conduz uma entrevista com o usuário, propõe um plano de ação com opções para ele escolher e só então cria a estrutura, as regras e as automações (hooks do Claude Code, arquivos de instrução para Cursor/Codex/Gemini). Use sempre que o usuário falar em segundo cérebro, second brain, memória persistente ou de longo prazo para IA, "a IA esquece tudo", perder contexto, contexto entre sessões, organizar notas para o Claude, migrar do Obsidian/Notion para algo que a IA use, ou pedir para salvar/registrar/fazer checkpoint do que foi decidido "no cérebro" — mesmo que não diga "segundo cérebro" explicitamente.
+description: Builds, feeds and maintains a local "second brain" for AI — a folder of Markdown notes the AI loads at the start of every session and updates on its own, so context survives across conversations and after compaction. Interviews the user, proposes an action plan with options for them to choose, and only then creates the structure, rules and automation (Claude Code hooks, instruction files for Cursor/Codex/Gemini). Use whenever the user mentions a second brain ("segundo cérebro"), persistent or long-term memory for AI, "the AI forgets everything" ("a IA esquece tudo"), losing context between sessions, organizing notes for Claude, moving from Obsidian/Notion to something the AI can use, or asks to save, record or checkpoint what was decided "in the brain" ("salva no cérebro") — even if they never say "second brain".
 ---
 
-# Segundo Cérebro para IA
+# Context Keeper
 
-Esta skill cria um segundo cérebro **feito para a IA ler e escrever**, não só para o humano navegar. A diferença para um vault comum do Obsidian é que aqui existem três coisas que o Obsidian sozinho não dá:
+This skill builds a second brain **made for the AI to read and write**, not just for a human to browse. Compared with a plain Obsidian vault, it adds three things:
 
-1. **Um ponto de entrada fixo** que a IA carrega automaticamente toda sessão.
-2. **Regras de alimentação**: quando e o que a IA deve registrar, sem o usuário precisar pedir.
-3. **Automação**: gatilhos que recarregam o contexto depois de uma compactação e lembram a IA de salvar o estado antes que ele se perca.
+1. **A fixed entry point** the AI loads automatically in every session.
+2. **Feeding rules**: when and what the AI records, without the user having to ask.
+3. **Automation**: hooks that reload context after compaction and ask for a checkpoint before it is lost.
 
-As notas são Markdown puro, com links comuns e frontmatter. A IA lê os arquivos direto do disco, então **não precisa do Obsidian**. Quem quiser pode abrir a mesma pasta no Obsidian só para visualizar, mas o padrão recomendado é uma pasta simples.
+The AI reads the files straight from disk, so the brain does not need Obsidian. A plain folder is the recommended default; Obsidian is an optional viewer for the human.
 
-## Princípios (leia antes de qualquer modo)
+## Principles
 
-Estes princípios explicam as escolhas da skill. Quando surgir um caso que as instruções não cobrem, decida a partir deles.
+When a case is not covered by the steps below, decide from these.
 
-- **O usuário escolhe, a IA propõe.** Nada é criado antes de o usuário aprovar um plano. Arquivos fora da pasta do cérebro (configurações de ferramentas, `~/.claude/CLAUDE.md` etc.) só são tocados com consentimento explícito e depois de um backup. A única exceção combinada no plano é o ponteiro `~/.context-keeper/config`, que é criado pela própria skill.
-- **Memória em camadas, para caber no contexto.** O que é carregado sempre precisa ser pequeno; o resto é buscado sob demanda.
-  - *Quente* (carregada toda sessão, idealmente menos de ~2.000 tokens no total): `CEREBRO.md` (regras e mapa) e `AGORA.md` (foco atual, pendências).
-  - *Morna* (carregada ao entrar num assunto): o `Indice.md` de cada projeto/área, com a seção "Estado atual".
-  - *Fria* (lida só quando necessário): decisões, pesquisas, diário antigo, arquivo.
-- **O cérebro guarda o porquê; o código e o git guardam o como.** Não copiar para o cérebro o que já está no código, no README ou no histórico do git.
-- **O cérebro precisa funcionar sem esta skill.** Todas as regras de alimentação ficam escritas dentro do próprio `CEREBRO.md`, para que qualquer IA (ou esta mesma, sem a skill instalada) saiba operar o cérebro.
-- **Atualizar em vez de duplicar.** Antes de criar uma nota, procurar se já existe uma sobre o assunto.
-- **Datas absolutas** (`AAAA-MM-DD`), nunca "ontem" ou "semana que vem" — a nota será lida meses depois.
-- **Nunca guardar segredos** (senhas, tokens, chaves de API, dados de cartão). Se o usuário colar um, avisar e não registrar.
+- **The user chooses, you propose.** Nothing is created before the user approves a plan. Files outside the brain folder are touched only with explicit consent and after a backup. The one exception, agreed in the plan, is the pointer `~/.context-keeper/config` that this skill creates.
+- **Layered memory, so it fits in context.**
+  - *Hot* (loaded every session, under ~2,000 tokens total): the root file (rules and map) and the now file (current focus, open items).
+  - *Warm* (loaded when a subject comes up): each subject's index note, with its "Current state" section.
+  - *Cold* (read only when needed): decisions, research, older journal entries, archive.
+- **The brain keeps the why; code and git keep the how.** Do not copy into the brain what the code, README or git history already hold.
+- **The brain works without this skill.** All feeding rules are written inside the brain's root file, so any AI can operate it.
+- **Update instead of duplicating**, use **absolute dates** (`YYYY-MM-DD`), and **never store secrets** (passwords, tokens, API keys).
+- **Plain text, no emojis**, in notes and in messages about the brain.
+- **Language.** Run the interview and build the brain in the user's language. Use `assets/templates/pt-BR/` for Portuguese and `assets/templates/en/` for English. For any other language, start from `en/`, translate file and folder names, and record them in `.context-keeper/config.json` → `files`.
 
-## Escolher o modo
+## Pick the mode
 
-Identifique o que o usuário quer e siga a seção correspondente:
-
-| Pedido do usuário | Modo |
+| The user wants to | Mode |
 |---|---|
-| Criar/montar um segundo cérebro, "quero que a IA lembre das coisas" | **1. Criar** |
-| Já tem um cérebro (desta skill ou feito à mão, ex.: uma pasta com `Claude.md`) e quer adaptar | **1. Criar**, começando pela etapa de diagnóstico em modo *adotar* |
-| "Salva isso no cérebro", "faz um checkpoint", fim de uma sessão longa, `/context-keeper:checkpoint`, ou o hook Stop pediu | **2. Checkpoint** |
-| Importar notas do Obsidian/Notion, documentos, um repositório, uma conversa | **3. Alimentar** |
-| "Revisa/organiza meu cérebro", notas desatualizadas, cérebro bagunçado, `/context-keeper:review` | **4. Manutenção** |
-| Mudar nível de automação, adicionar outra ferramenta de IA | **5. Ajustar** |
+| Create a second brain, "I want the AI to remember things", adopt an existing brain or notes folder, change the automation level or add another AI tool | **1. Setup** |
+| "Save this to the brain", "checkpoint", end of a long session, `/context-keeper:checkpoint`, or the Stop hook asked for it | **2. Checkpoint** |
+| Bring in notes from Obsidian/Notion, documents, a repository or exported conversations | **3. Import** |
+| "Review/clean up my brain", stale notes, a messy brain, `/context-keeper:review` | **4. Review** |
 
 ---
 
-## Modo 1 — Criar
+## Mode 1 — Setup
 
-O fluxo tem seis etapas. Não pule a aprovação do plano (etapa 3): é ela que garante que o usuário é quem decide.
+Six steps. Never skip step 3: the plan approval is what keeps the user in charge.
 
-### Etapa 1: Diagnóstico silencioso
+1. **Detect, silently.** Find out what you can before asking anything:
+   - operating system and home folder;
+   - AI tools present (`~/.claude/`, `~/.claude/CLAUDE.md`, `~/.codex/`, `~/.gemini/`, Cursor);
+   - an existing brain: first `~/.context-keeper/config`, then folders with `BRAIN.md`, `CEREBRO.md`, `Claude.md`, `AGENTS.md` or `.context-keeper/config.json`;
+   - an Obsidian vault (a folder with `.obsidian/`);
+   - `bash` (needed for the hooks; on Windows it ships with Git for Windows, which Claude Code already requires).
 
-Antes de perguntar qualquer coisa, descubra o que der para descobrir sozinho — cada pergunta evitada é atrito a menos para o usuário:
+   If a brain exists, switch to **adopt**: keep everything the user made, map it to this skill's concepts (e.g. their `Claude.md` acts as the root file) and propose only what is missing. If it was created by this skill, read `.context-keeper/config.json` and ask what they want to change. Never overwrite existing notes.
 
-- Sistema operacional e pasta do usuário.
-- Ferramentas de IA instaladas: existe `~/.claude/`? `~/.claude/CLAUDE.md`? `~/.codex/`? `~/.gemini/`? Cursor?
-- Já existe um cérebro? Comece por `~/.context-keeper/config` (aponta para um cérebro criado por esta skill). Depois procure pastas com `CEREBRO.md`, `BRAIN.md`, `Claude.md`, `AGENTS.md` ou `.context-keeper/config.json` em lugares óbvios (Documentos, Desktop, raiz de discos). Se o usuário mencionar um, leia o arquivo raiz dele.
-- Existe um vault do Obsidian (pasta com `.obsidian/`)?
-- Há `bash` disponível (necessário para os scripts de automação; no Windows vem com o Git for Windows, que o Claude Code já exige)?
+2. **Interview.** Follow `references/interview.md`. Offer the quick path (5 questions) or the full one, ask at most 3–4 questions per round, and use `AskUserQuestion` when available.
 
-Se encontrar um cérebro existente, entre em **modo adotar**: o objetivo passa a ser preservar o que o usuário já fez, mapear a estrutura dele para os conceitos desta skill (ex.: o `Claude.md` dele faz o papel do `CEREBRO.md`) e propor só o que falta. Nunca sobrescreva notas existentes.
+3. **Plan.** Build the plan with the format at the end of `references/interview.md`, using `references/architectures.md` for the options. Present it and **wait for the user's choices**. Adjust and present again as many times as needed.
 
-### Etapa 2: Entrevista
+4. **Build**, in this order, reporting progress:
+   1. **Folders**: only the core ones and those that will have content now. Empty folders confuse the AI and the user.
+   2. **Core files** from the language's template set: root file, now file, `Profile/About-me.md` (or the localized name) and the preferences file from the interview answers, the note templates copied into `Templates/`, and `.context-keeper/config.json` from `assets/templates/config.json`. Keep the root file under ~150 lines: it loads every session.
+   3. **Pointer**: write `~/.context-keeper/config` with the line `brain_path=<brain path, forward slashes>`. The hooks and the checker find the brain through it. If it already points elsewhere, ask before replacing it.
+   4. **Integrations** for the chosen level: follow `references/integrations.md`.
+   5. **Git** (if chosen): `git init`, `.gitignore` with `.context-keeper/state/`, first commit. For a remote, recommend a **private** repository.
 
-Leia `references/entrevista.md` para o banco de perguntas completo. Pontos essenciais:
+5. **Seed.** An empty brain helps nobody:
+   - an index note for each active subject the user mentioned, with "Current state" filled in;
+   - the now file with the current focus and open items;
+   - imports the user asked for (Mode 3);
+   - the first journal entry recording the setup and the choices made, and the approved plan saved to `.context-keeper/setup-plan.md`.
 
-- Ofereça dois caminhos logo no início: **rápido** (5 perguntas, o resto com padrões sensatos) ou **completo** (todos os blocos). Usuários comuns geralmente preferem o rápido.
-- Faça no máximo 3–4 perguntas por rodada. Se a ferramenta `AskUserQuestion` (ou equivalente de múltipla escolha) estiver disponível, use-a — clicar é mais fácil do que digitar.
-- Não pergunte o que o diagnóstico já respondeu; apenas confirme ("Vi que você usa o Claude Code e o Cursor, certo?").
-- Adapte a linguagem ao nível técnico do usuário. Para quem não é técnico, evite termos como "hook", "frontmatter", "JSON" sem explicar em uma frase.
-- Conduza a entrevista no idioma do usuário; o cérebro será criado nesse idioma.
+6. **Verify and hand off.**
+   1. Run `bash scripts/brain-lint.sh <brain>` (from this skill's folder) and fix what it reports.
+   2. At level 3, run the start hook without the brain path, to test the pointer too: `echo '{"source":"startup"}' | bash scripts/session-start.sh`. The output must contain the now file and stay under 8,000 characters.
+   3. Give the user a **one-screen guide**: where the brain lives, what happens automatically, 3–4 useful phrases ("save this to the brain", "what's in NOW?", "review the brain") and, if they chose Obsidian, how to open the folder as a vault.
+   4. Suggest a real test: open a new session and ask "what was I working on?".
 
-### Etapa 3: Plano de ação (o usuário escolhe)
+## Mode 2 — Checkpoint
 
-Com as respostas, monte o plano usando `references/plano-template.md` e `references/arquiteturas.md`. O plano precisa conter:
+Follow the *Checkpoint* section of `references/feeding-protocol.md`:
 
-1. Resumo do que você entendeu (perfil, usos, ferramentas).
-2. **Opções para o usuário escolher**, com sua recomendação marcada e o motivo:
-   - a estrutura de pastas (ex.: *Por assunto* vs. *PARA*), mostrada como árvore;
-   - a visualização: pasta simples (recomendado) ou Obsidian, explicando que a IA não precisa do Obsidian;
-   - o nível de automação (1 Manual, 2 Conectado, 3 Automático), explicando em linguagem simples o que cada um faz e o que ele toca no computador.
-3. A lista exata de arquivos que serão criados **dentro** do cérebro.
-4. A lista exata de arquivos **fora** do cérebro que serão alterados (com a informação de que haverá backup).
-5. O conteúdo inicial que será semeado (perfil, projetos atuais, importação).
-6. O que o usuário precisará fazer manualmente (ex.: colar uma regra nas configurações do Cursor).
-7. Como desfazer tudo.
+1. Read the root file and the now file.
+2. List what is worth keeping since the last checkpoint: decisions (with the reason), state changes, open items, discoveries, new preferences.
+3. Update decision notes, the "Current state" of each subject touched, the now file, the preferences file and the journal.
+4. Tell the user in 2–4 lines what was saved and where. If nothing relevant happened, say so instead of creating empty notes.
 
-Apresente o plano e **espere a aprovação** (ou as escolhas) do usuário. Ajuste e reapresente quantas vezes for necessário.
+## Mode 3 — Import
 
-### Etapa 4: Execução
+Follow `references/importing.md`. Importing is not copying:
 
-Depois da aprovação, execute nesta ordem, informando o progresso:
+1. Take an inventory of the source, without changing anything.
+2. Triage each part: bring and reorganize, summarize, only link to it, or leave out.
+3. Present the triage as a table and wait for approval.
+4. Copy into the brain (never move or delete the source) and log the import in the journal.
 
-1. **Estrutura**: crie as pastas escolhidas. Crie só as pastas que terão conteúdo agora ou que fazem parte do núcleo (`Inbox/`, `Diario/`, `Templates/`, `.context-keeper/`) — pastas vazias confundem a IA e o usuário.
-2. **Arquivos-núcleo** a partir de `assets/templates/`:
-   - `CEREBRO.md` ← `assets/templates/CEREBRO.md`, preenchido com as regras de conduta, o idioma, o mapa real e o protocolo de alimentação no nível de autonomia escolhido. Mantenha-o abaixo de ~150 linhas: ele é carregado toda sessão.
-   - `AGORA.md` ← `assets/templates/AGORA.md`.
-   - `Perfil/Sobre-mim.md` e `Perfil/Preferencias.md` ← respostas da entrevista.
-   - `Templates/` ← copie os modelos de nota (projeto, decisão, pesquisa, diário, ideia).
-   - `.context-keeper/config.json` ← a partir de `assets/templates/config.json`: caminho, idioma, estrutura, nível, modo de instalação, ferramentas integradas, data de criação, versão da skill e os **nomes dos arquivos principais** (`files.root`, `files.now`, `files.journal`). Os scripts leem esses nomes; os modos 4 e 5 leem o resto para saber o que foi montado.
-3. **Ponteiro do cérebro**: grave `~/.context-keeper/config` com a linha `brain_path=<caminho do cérebro com barras />`. É por ele que os hooks e o verificador encontram o cérebro. Se o arquivo já existir apontando para outro cérebro, pergunte ao usuário antes de trocar.
-4. **Integrações** conforme o nível escolhido — siga `references/integracoes.md`. Para o nível 3, verifique como a skill foi instalada:
-   - **Como plugin do Claude Code** (a pasta desta skill fica dentro de `.../plugins/...` e há `hooks/hooks.json` na raiz do plugin): os hooks já vêm prontos e passam a funcionar assim que o ponteiro existe. Não edite `~/.claude/settings.json`.
-   - **Como skill avulsa**: copie os scripts de `scripts/` (incluindo `lib.sh`) para `.context-keeper/scripts/` dentro do cérebro e faça o *merge* de `assets/hooks/claude-settings.json` em `~/.claude/settings.json`, sem apagar o que já existe e com backup antes (`settings.json.bak-AAAA-MM-DD`). Mencione ao usuário que instalar como plugin dispensa esse passo.
-5. **Versionamento** (se escolhido): `git init` na pasta do cérebro, `.gitignore` com `.context-keeper/state/`, primeiro commit. Se o usuário quiser um remoto, recomende repositório **privado**.
+## Mode 4 — Review
 
-### Etapa 5: Semear o conteúdo inicial
+Follow `references/maintenance.md`:
 
-Um cérebro vazio não ajuda ninguém. Semeie com o que já é valioso:
-
-- Uma nota `Indice.md` para cada projeto/assunto ativo que o usuário citou, com a seção "Estado atual" preenchida com o que ele contou.
-- `AGORA.md` com o foco atual e as pendências mencionadas.
-- Se o usuário pediu importação (Obsidian, pasta de documentos, README de projetos), siga o **Modo 3**.
-- A primeira entrada em `Diario/` registrando a criação do cérebro e as escolhas feitas. Salve também o plano aprovado em `.context-keeper/plano-de-criacao.md` para referência futura.
-
-### Etapa 6: Validar e ensinar
-
-1. Rode `bash <pasta-desta-skill>/scripts/brain-lint.sh <pasta-do-cerebro>` e corrija o que ele apontar.
-2. No nível 3, rode o hook de início de sessão manualmente, **sem passar o caminho do cérebro** (assim você testa também o ponteiro): `echo '{"source":"startup"}' | bash <pasta-dos-scripts>/session-start.sh`. A saída deve conter o `AGORA.md` e ter menos de 8.000 caracteres.
-3. Entregue ao usuário um **guia de uso de uma tela**: onde fica o cérebro, o que acontece automaticamente, as 3–4 frases úteis ("salva no cérebro", "o que tem no AGORA?", "revisa o cérebro") e, se o usuário escolheu Obsidian, como abrir a pasta como cofre e configurar os links (ver `references/arquiteturas.md`).
-4. Sugira um teste real: abrir uma sessão nova e perguntar "no que eu estava trabalhando?".
+1. Run `scripts/brain-lint.sh`.
+2. Add the checks that need judgment (duplicates, contradicting decisions, stale "Current state").
+3. Present a short report in plain language, most costly problems first.
+4. Apply only what the user approves and log the review in the journal.
 
 ---
 
-## Modo 2 — Checkpoint
+## Files
 
-O checkpoint é o que impede a perda de contexto: ele transforma o que está só na conversa em notas. Siga `references/alimentacao.md` (seção *Checkpoint*). Em resumo:
-
-1. Leia o `CEREBRO.md` e o `AGORA.md` para saber onde as coisas ficam.
-2. Revise a conversa desde o último checkpoint e extraia apenas o que vale guardar: decisões (com o motivo), mudanças de estado, pendências, descobertas, preferências novas do usuário.
-3. Atualize — nesta ordem — as notas de decisão, o "Estado atual" do `Indice.md` do assunto, o `AGORA.md` e uma entrada curta no `Diario/AAAA-MM-DD.md`.
-4. Informe ao usuário em 2–4 linhas o que foi registrado e onde.
-
-Se a conversa não produziu nada que valha guardar, diga isso em vez de criar notas vazias.
-
-## Modo 3 — Alimentar (importar)
-
-Leia `references/importar.md`. A ideia central: **importar não é copiar**. Um vault do Obsidian com 2.000 notas copiado inteiro vira ruído. Faça uma triagem, proponha o que entra (resumido, reorganizado e com frontmatter), o que vira só um link para a fonte original e o que fica de fora — e deixe o usuário aprovar antes.
-
-## Modo 4 — Manutenção
-
-Leia `references/manutencao.md`. Rode `scripts/brain-lint.sh`, apresente o relatório em linguagem simples e proponha as correções (consolidar duplicatas, arquivar o que está parado, encolher o `CEREBRO.md`/`AGORA.md` se cresceram demais, esvaziar a `Inbox/`). Aplique só o que o usuário aprovar.
-
-## Modo 5 — Ajustar
-
-Leia `.context-keeper/config.json` para saber o estado atual, pergunte o que o usuário quer mudar, mostre o plano da mudança (o que entra, o que sai, que arquivos serão tocados), aplique após aprovação e atualize o `config.json`.
-
----
-
-## Arquivos de referência
-
-| Arquivo | Quando ler |
+| File | When to read |
 |---|---|
-| `references/entrevista.md` | Etapa 2 do Modo 1 |
-| `references/arquiteturas.md` | Etapa 3 do Modo 1 (estruturas de pastas, pasta simples vs. Obsidian, estilo de link, níveis de automação) |
-| `references/plano-template.md` | Etapa 3 do Modo 1 (formato do plano) |
-| `references/integracoes.md` | Etapa 4 do Modo 1 e Modo 5 (Claude Code, Claude Desktop, Cursor, Codex, Gemini, ChatGPT) |
-| `references/alimentacao.md` | Ao escrever o protocolo no `CEREBRO.md` e no Modo 2 |
-| `references/importar.md` | Modo 3 |
-| `references/manutencao.md` | Modo 4 |
-| `assets/templates/*` | Modelos dos arquivos criados no cérebro |
-| `assets/hooks/claude-settings.json` | Trecho de hooks para `~/.claude/settings.json` (nível 3, só na instalação como skill avulsa) |
-| `scripts/lib.sh` | Funções comuns: encontra o cérebro (argumento, `CONTEXT_KEEPER_BRAIN` ou `~/.context-keeper/config`) e os nomes dos arquivos |
-| `scripts/session-start.sh` | Hook: injeta o contexto quente no início da sessão e após compactação |
-| `scripts/checkpoint-stop.sh` | Hook: pede um checkpoint quando a conversa cresceu muito desde o último |
-| `scripts/brain-lint.sh` | Verificação de saúde do cérebro |
+| `references/interview.md` | Setup steps 2–3 (questions, defaults and the plan format) |
+| `references/architectures.md` | Setup step 3 (folder structures, plain folder vs Obsidian, link style, automation levels) |
+| `references/integrations.md` | Setup step 4 (Claude Code, Claude Desktop, Cursor, Codex, Gemini, ChatGPT) |
+| `references/feeding-protocol.md` | Writing the root file's feeding rules, and Mode 2 |
+| `references/importing.md` | Mode 3 |
+| `references/maintenance.md` | Mode 4 |
+| `assets/templates/pt-BR/`, `assets/templates/en/` | Brain files per language |
+| `assets/templates/config.json` | The brain's `.context-keeper/config.json` |
+| `assets/hooks/claude-settings.json` | Hooks for `~/.claude/settings.json` (level 3, standalone install only) |
+| `scripts/lib.sh` | Shared by the scripts: finds the brain, its file names and language |
+| `scripts/session-start.sh` | Hook: loads the hot context at session start and after compaction |
+| `scripts/checkpoint-stop.sh` | Hook: asks for a checkpoint when the conversation grew a lot since the last one |
+| `scripts/brain-lint.sh` | Health check of the brain |

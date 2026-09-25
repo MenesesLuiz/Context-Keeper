@@ -1,7 +1,7 @@
 ---
-description: Salva no segundo cérebro o que foi decidido e feito nesta conversa
+description: Save to the second brain what was decided and done in this conversation
 ---
 
-Use a skill `context-keeper` no **Modo 2 — Checkpoint**: registre no segundo cérebro as decisões, as mudanças de estado, as pendências, as descobertas e as preferências desta conversa desde o último checkpoint. No fim, diga em 2–4 linhas o que foi registrado e onde.
+Use the `context-keeper` skill in **Mode 2 — Checkpoint**: record in the second brain the decisions, state changes, open items, discoveries and preferences from this conversation since the last checkpoint. At the end, say in 2–4 lines what was saved and where.
 
 $ARGUMENTS

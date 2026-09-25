@@ -1,124 +1,124 @@
 #!/usr/bin/env bash
-# Verificação de saúde do segundo cérebro. Não altera nada: só relata.
+# Second brain health check. Changes nothing: it only reports.
 #
-# Uso: brain-lint.sh [pasta-do-cerebro] [dias-para-considerar-parado]
+# Usage: brain-lint.sh [brain-folder] [days-until-stale]
+# Without a folder, uses ~/.context-keeper/config.
 
 set -u
 . "$(dirname "$0")/lib.sh"
-DIAS="${2:-60}"
-MAX_RAIZ=150
-MAX_AGORA=60
-DIAS_INBOX=14
+DAYS="${2:-60}"
+MAX_ROOT_LINES=150
+MAX_NOW_LINES=60
+INBOX_DAYS=14
 
 if ! ck_resolve_brain "${1:-}"; then
-  echo "Uso: brain-lint.sh [pasta-do-cerebro] [dias]  (sem argumento, usa ~/.context-keeper/config)" >&2
+  echo "Usage: brain-lint.sh [brain-folder] [days]  (without a folder, uses ~/.context-keeper/config)" >&2
   exit 1
 fi
 ck_load_names
-CEREBRO="$BRAIN"
-cd "$CEREBRO" || exit 1
+cd "$BRAIN" || exit 1
 
-problemas=0
-secao() { echo; echo "## $1"; }
-aviso() { echo "- $1"; problemas=$((problemas + 1)); }
+issues=0
+section() { echo; echo "## $1"; }
+warn() { echo "- $1"; issues=$((issues + 1)); }
 
-# Lista as notas, ignorando pastas de sistema e os modelos.
-notas() {
+# Lists the notes, skipping system folders and templates.
+notes() {
   find . -type f -name '*.md' \
     -not -path './.git/*' -not -path './.obsidian/*' -not -path './.trash/*' \
-    -not -path './.context-keeper/*' -not -path './Templates/*' -not -path './Modelos/*' -print0
+    -not -path './.context-keeper/*' -not -path './Templates/*' -print0
 }
 
-echo "# Verificação do segundo cérebro: $CEREBRO"
-echo "Data: $(date +%F)"
+echo "# Second brain check: $BRAIN"
+echo "Date: $(date +%F)"
 
-# 1. Tamanho do contexto quente
-secao "Contexto quente (carregado em toda sessão)"
-raiz="$ROOT_FILE"
-if [ -z "$raiz" ]; then
-  aviso "Nenhum arquivo raiz encontrado (CEREBRO.md, BRAIN.md, Claude.md ou AGENTS.md)."
+# 1. Size of the hot context
+section "Hot context (loaded in every session)"
+if [ -z "$ROOT_FILE" ]; then
+  warn "No root file found (BRAIN.md, CEREBRO.md, Claude.md or AGENTS.md)."
 else
-  linhas=$(wc -l < "$raiz" | tr -d ' ')
-  [ "$linhas" -gt "$MAX_RAIZ" ] && aviso "$raiz tem $linhas linhas (recomendado: até $MAX_RAIZ)."
-  echo "- $raiz: $linhas linhas"
+  lines=$(wc -l < "$ROOT_FILE" | tr -d ' ')
+  [ "$lines" -gt "$MAX_ROOT_LINES" ] && warn "$ROOT_FILE has $lines lines (recommended: up to $MAX_ROOT_LINES)."
+  echo "- $ROOT_FILE: $lines lines"
 fi
 if [ -n "$NOW_FILE" ]; then
-  linhas=$(wc -l < "$NOW_FILE" | tr -d ' ')
-  [ "$linhas" -gt "$MAX_AGORA" ] && aviso "$NOW_FILE tem $linhas linhas (recomendado: até $MAX_AGORA)."
-  echo "- $NOW_FILE: $linhas linhas"
+  lines=$(wc -l < "$NOW_FILE" | tr -d ' ')
+  [ "$lines" -gt "$MAX_NOW_LINES" ] && warn "$NOW_FILE has $lines lines (recommended: up to $MAX_NOW_LINES)."
+  echo "- $NOW_FILE: $lines lines"
 else
-  aviso "Não há arquivo de estado atual (AGORA.md ou NOW.md): a IA não tem onde ler onde parou."
+  warn "No now file (NOW.md or AGORA.md): the AI has nowhere to read where it stopped."
 fi
 
-# 2. Frontmatter e notas paradas
-secao "Frontmatter e notas paradas (mais de $DIAS dias)"
-corte="$(date -d "-$DIAS days" +%F 2>/dev/null || date -v-"$DIAS"d +%F 2>/dev/null || echo "")"
+# 2. Frontmatter and stale notes
+section "Frontmatter and stale notes (older than $DAYS days)"
+cutoff="$(date -d "-$DAYS days" +%F 2>/dev/null || date -v-"$DAYS"d +%F 2>/dev/null || echo "")"
 total=0
 while IFS= read -r -d '' f; do
   total=$((total + 1))
-  case "$f" in "./$JOURNAL_DIR"/*|./Arquivo/*|./4-Arquivo/*|./Archive/*|"./$raiz") continue ;; esac
+  case "$f" in "./$JOURNAL_DIR"/*|./Archive/*|./Arquivo/*|./4-Archive/*|./4-Arquivo/*|"./$ROOT_FILE") continue ;; esac
   if [ "$(head -n1 "$f" | tr -d '\r')" != "---" ]; then
-    aviso "Sem frontmatter: ${f#./}"
+    warn "No frontmatter: ${f#./}"
     continue
   fi
-  atualizado="$(grep -m1 -E '^atualizado:' "$f" | sed -E 's/^atualizado:[[:space:]]*([0-9]{4}-[0-9]{2}-[0-9]{2}).*/\1/')"
-  if [ -n "$corte" ] && [ -n "$atualizado" ] && [[ "$atualizado" < "$corte" ]]; then
-    aviso "Parada desde $atualizado: ${f#./}"
+  updated="$(grep -m1 -E '^(updated|atualizado):' "$f" | sed -E 's/^[a-z]+:[[:space:]]*([0-9]{4}-[0-9]{2}-[0-9]{2}).*/\1/')"
+  if [ -n "$cutoff" ] && [ -n "$updated" ] && [[ "$updated" < "$cutoff" ]]; then
+    warn "Stale since $updated: ${f#./}"
   fi
-done < <(notas)
-echo "- Notas verificadas: $total"
+done < <(notes)
+echo "- Notes checked: $total"
 
 # 3. Inbox
-secao "Inbox (itens com mais de $DIAS_INBOX dias)"
+section "Inbox (items older than $INBOX_DAYS days)"
 if [ -d Inbox ]; then
   while IFS= read -r -d '' f; do
-    aviso "Aguardando triagem: ${f#./}"
-  done < <(find ./Inbox -type f -mtime +"$DIAS_INBOX" -print0)
+    warn "Waiting for triage: ${f#./}"
+  done < <(find ./Inbox -type f -mtime +"$INBOX_DAYS" -print0)
 fi
 
-# 4. Links quebrados
-secao "Links quebrados"
-existentes="$(find . -type f -not -path './.git/*' -not -path './.obsidian/*' | sed 's#.*/##; s#\.md$##' | sort -u)"
+# 4. Broken links
+section "Broken links"
+existing="$(find . -type f -not -path './.git/*' -not -path './.obsidian/*' | sed 's#.*/##; s#\.md$##' | sort -u)"
+links_report="${TMPDIR:-/tmp}/brain-lint-links.$$"
 while IFS= read -r -d '' f; do
   dir="$(dirname "$f")"
-  # Ignora exemplos em blocos de código e em `código inline`.
-  texto="$(awk '/^[[:space:]]*```/ { dentro = !dentro; next } !dentro' "$f" | sed 's/`[^`]*`//g')"
+  # Skip examples inside code blocks and `inline code`.
+  text="$(awk '/^[[:space:]]*```/ { inside = !inside; next } !inside' "$f" | sed 's/`[^`]*`//g')"
 
-  # Wikilinks [[Nota]]: procurados pelo nome em qualquer pasta, como o Obsidian faz.
-  printf '%s\n' "$texto" | grep -o '\[\[[^]]*\]\]' 2>/dev/null | sort -u | while IFS= read -r link; do
-    alvo="${link#[[}"; alvo="${alvo%]]}"
-    alvo="${alvo%%|*}"; alvo="${alvo%%#*}"; alvo="${alvo##*/}"; alvo="${alvo%.md}"
-    [ -z "$alvo" ] && continue
-    case "$alvo" in *'{{'*) continue ;; esac
-    if ! printf '%s\n' "$existentes" | grep -Fxq "$alvo"; then
-      echo "- ${f#./} → [[${alvo}]]"
+  # Wikilinks [[Note]]: looked up by name in any folder, like Obsidian does.
+  printf '%s\n' "$text" | grep -o '\[\[[^]]*\]\]' 2>/dev/null | sort -u | while IFS= read -r link; do
+    target="${link#[[}"; target="${target%]]}"
+    target="${target%%|*}"; target="${target%%#*}"; target="${target##*/}"; target="${target%.md}"
+    [ -z "$target" ] && continue
+    case "$target" in *'{{'*) continue ;; esac
+    if ! printf '%s\n' "$existing" | grep -Fxq "$target"; then
+      echo "- ${f#./} → [[${target}]]"
     fi
   done
 
-  # Links Markdown [texto](caminho): o caminho é relativo à pasta da nota.
-  printf '%s\n' "$texto" | grep -oE '\]\([^)[:space:]]+\)' 2>/dev/null | sort -u | while IFS= read -r link; do
-    alvo="${link#](}"; alvo="${alvo%)}"
-    case "$alvo" in http://*|https://*|mailto:*|'#'*|*'{{'*) continue ;; esac
-    alvo="${alvo%%#*}"; alvo="$(printf '%s' "$alvo" | sed 's/%20/ /g')"
-    [ -z "$alvo" ] && continue
-    [ -e "$dir/$alvo" ] || echo "- ${f#./} → ($alvo)"
+  # Markdown links [text](path): the path is relative to the note's folder.
+  printf '%s\n' "$text" | grep -oE '\]\([^)[:space:]]+\)' 2>/dev/null | sort -u | while IFS= read -r link; do
+    target="${link#](}"; target="${target%)}"
+    case "$target" in http://*|https://*|mailto:*|'#'*|*'{{'*) continue ;; esac
+    target="${target%%#*}"; target="$(printf '%s' "$target" | sed 's/%20/ /g')"
+    [ -z "$target" ] && continue
+    [ -e "$dir/$target" ] || echo "- ${f#./} → ($target)"
   done
-done < <(notas) > "${TMPDIR:-/tmp}/brain-lint-links.$$"
-if [ -s "${TMPDIR:-/tmp}/brain-lint-links.$$" ]; then
-  cat "${TMPDIR:-/tmp}/brain-lint-links.$$"
-  problemas=$((problemas + $(wc -l < "${TMPDIR:-/tmp}/brain-lint-links.$$")))
+done < <(notes) > "$links_report"
+if [ -s "$links_report" ]; then
+  cat "$links_report"
+  issues=$((issues + $(wc -l < "$links_report")))
 fi
-rm -f "${TMPDIR:-/tmp}/brain-lint-links.$$"
+rm -f "$links_report"
 
-# 5. Possíveis segredos (mostra só arquivo e linha, nunca o valor)
-secao "Possíveis segredos"
+# 5. Possible secrets (shows only file and line, never the value)
+section "Possible secrets"
 grep -rnIE \
   --exclude-dir=.git --exclude-dir=.obsidian --exclude-dir=.context-keeper \
   '((api[_-]?key|secret|senha|password|passwd|token)[[:space:]]*[:=][[:space:]]*[^[:space:]{}]{8,})|(sk-[A-Za-z0-9_-]{20,})|(ghp_[A-Za-z0-9]{20,})|(AKIA[0-9A-Z]{16})' \
-  . 2>/dev/null | cut -d: -f1,2 | while IFS= read -r ocorrencia; do
-    echo "- Verificar: ${ocorrencia#./}"
+  . 2>/dev/null | cut -d: -f1,2 | while IFS= read -r hit; do
+    echo "- Check: ${hit#./}"
   done
 
-secao "Resumo"
-echo "- Pontos de atenção (sem contar segredos): $problemas"
+section "Summary"
+echo "- Issues found (not counting secrets): $issues"
 exit 0

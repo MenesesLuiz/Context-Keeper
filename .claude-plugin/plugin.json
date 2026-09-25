@@ -1,7 +1,7 @@
 {
   "name": "context-keeper",
-  "version": "0.1.0",
-  "description": "Monta e mantém um segundo cérebro local para a IA: uma pasta de notas Markdown que o Claude carrega em toda sessão, recarrega após cada compactação e alimenta sozinho com decisões, estado dos projetos e preferências.",
+  "version": "0.2.0",
+  "description": "Builds and maintains a local second brain for AI: a folder of Markdown notes that Claude loads in every session, reloads after every compaction and feeds on its own with decisions, project state and preferences.",
   "author": {
     "name": "MenesesLuiz",
     "url": "https://github.com/MenesesLuiz"
@@ -9,5 +9,5 @@
   "homepage": "https://github.com/MenesesLuiz/Context-Keeper",
   "repository": "https://github.com/MenesesLuiz/Context-Keeper",
   "license": "MIT",
-  "keywords": ["second-brain", "segundo-cerebro", "memory", "memoria", "context", "contexto", "obsidian", "notes"]
+  "keywords": ["second-brain", "memory", "context", "notes", "markdown", "obsidian", "segundo-cerebro"]
 }

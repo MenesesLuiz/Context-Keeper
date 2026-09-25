@@ -1,7 +1,7 @@
 ---
-description: Verifica a saúde do segundo cérebro e propõe uma faxina
+description: Check the second brain's health and propose a cleanup
 ---
 
-Use a skill `context-keeper` no **Modo 4 — Manutenção**: rode a verificação do cérebro, explique o resultado em linguagem simples e proponha as correções. Aplique só o que eu aprovar.
+Use the `context-keeper` skill in **Mode 4 — Review**: run the brain checker, explain the result in plain language and propose fixes. Apply only what I approve.
 
 $ARGUMENTS

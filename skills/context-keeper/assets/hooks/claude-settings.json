@@ -5,7 +5,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bash \"<CEREBRO>/.context-keeper/scripts/session-start.sh\" \"<CEREBRO>\""
+            "command": "bash \"<BRAIN>/.context-keeper/scripts/session-start.sh\" \"<BRAIN>\""
           }
         ]
       }
@@ -15,7 +15,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bash \"<CEREBRO>/.context-keeper/scripts/checkpoint-stop.sh\" \"<CEREBRO>\""
+            "command": "bash \"<BRAIN>/.context-keeper/scripts/checkpoint-stop.sh\" \"<BRAIN>\""
           }
         ]
       }
