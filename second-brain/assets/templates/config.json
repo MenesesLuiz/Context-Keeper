@@ -1,0 +1,14 @@
+{
+  "versao_skill": "0.1.0",
+  "criado": "{{DATA}}",
+  "caminho": "{{CEREBRO}}",
+  "idioma": "pt-BR",
+  "estrutura": "por-assunto",
+  "nivel_automacao": 3,
+  "autonomia_escrita": "escrever-e-avisar",
+  "git": false,
+  "integracoes": [
+    { "ferramenta": "claude-code", "arquivo": "~/.claude/CLAUDE.md", "tipo": "ponteiro", "backup": "~/.claude/CLAUDE.md.bak-{{DATA}}" },
+    { "ferramenta": "claude-code", "arquivo": "~/.claude/settings.json", "tipo": "hooks", "backup": "~/.claude/settings.json.bak-{{DATA}}" }
+  ]
+}
