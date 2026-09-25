@@ -17,7 +17,7 @@ Importar **não é copiar**. O objetivo é que o cérebro fique mais útil para 
 
 ## Fontes comuns
 
-- **Obsidian:** os `[[wikilinks]]` já são compatíveis. Atenção a links para notas que não serão trazidas: troque-os por texto simples ou pelo caminho original.
+- **Obsidian:** se o cérebro usa links Markdown (padrão), converta cada `[[Nota]]` e `[[Nota|texto]]` em `[texto](caminho/relativo/Nota.md)`, apontando para onde a nota ficou na estrutura nova. Se usa wikilinks, eles podem ficar como estão. Em qualquer caso, links para notas que não serão trazidas viram texto simples ou apontam para o caminho original. Anexos (`![[imagem.png]]`) só entram se forem necessários; nesse caso, vão para uma pasta `Anexos/`.
 - **Notion:** a exportação em Markdown gera nomes com IDs longos (`Pagina 3f2a...md`); limpe os nomes.
 - **Repositórios de código:** não copie código. Leia o README e o histórico recente e crie o `Indice.md` do projeto com visão geral, stack e "Estado atual"; aponte para o caminho do repositório.
 - **Conversas exportadas de IA:** extraia só decisões, preferências e fatos estáveis usando o filtro de `alimentacao.md`. Conversas são longas e quase todo o conteúdo é caminho, não conclusão.

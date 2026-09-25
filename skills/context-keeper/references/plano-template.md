@@ -19,6 +19,8 @@ Apresente o plano na conversa com este formato. Seja concreto: caminhos reais, n
 **Opção B — PARA**
 <árvore com os nomes reais>
 
+**Visualização:** pasta simples (recomendado) · Obsidian — <o que escolheu e, se Obsidian, o estilo de link>
+
 ## 3. Escolha o nível de automação
 | Nível | O que faz | O que toca no seu computador |
 |---|---|---|
@@ -46,4 +48,4 @@ Apresente o plano na conversa com este formato. Seja concreto: caminhos reais, n
 **Responda com as suas escolhas (ex.: "A + nível 3") ou peça ajustes.**
 ```
 
-Depois da aprovação, salve a versão final em `<Cerebro>/.cerebro/plano-de-criacao.md`.
+Depois da aprovação, salve a versão final em `<Cerebro>/.context-keeper/plano-de-criacao.md`.

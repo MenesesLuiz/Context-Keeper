@@ -17,7 +17,11 @@ Use quando o usuário escolher "rápido". O resto recebe os padrões da tabela n
 1. **Para que você mais usa IA?** (múltipla escolha: programação, estudos/faculdade, trabalho/escritório, criação de conteúdo, pesquisa, vida pessoal/organização)
 2. **Quais projetos ou assuntos estão ativos agora?** (texto livre: "liste 1 a 5, uma linha cada")
 3. **Quais IAs você usa?** (confirmar o que o diagnóstico encontrou: Claude Code, Claude Desktop/claude.ai, Cursor, Codex, Gemini CLI, ChatGPT, outra)
-4. **Onde salvar o cérebro?** (sugerir um caminho concreto; avisar se estiver dentro de OneDrive/Dropbox, que sincroniza — ótimo para backup, mas conflitos podem acontecer se duas máquinas editarem ao mesmo tempo)
+4. **Onde salvar o cérebro, e como você quer visualizá-lo?** Sugira um caminho concreto e ofereça duas opções:
+   - **Uma pasta simples no computador (recomendado).** Explique que a IA lê e escreve os arquivos direto do disco e não abre o Obsidian como uma pessoa faria. Para ela, o Obsidian não muda nada.
+   - **Obsidian.** Só para *você* navegar pelas notas, ver o grafo e buscar. Explique que dá para adicionar depois: basta abrir a mesma pasta como cofre no Obsidian.
+
+   Avise se o caminho estiver dentro de OneDrive/Dropbox: sincroniza (ótimo para backup), mas pode haver conflitos se duas máquinas editarem ao mesmo tempo.
 5. **Quanto a IA pode fazer sozinha?** (Nível 1 Manual / 2 Conectado / 3 Automático — ver `arquiteturas.md`; recomendar o 3 para quem usa Claude Code, o 2 para os demais)
 
 ---
@@ -45,6 +49,7 @@ Use quando o usuário escolher "rápido". O resto recebe os padrões da tabela n
 
 - Quais IAs usa, e qual é a principal?
 - Usa Obsidian, Notion, Google Docs, OneNote ou similar? Quer importar algo de lá? *Dispara o Modo 3.*
+- Quer visualizar o cérebro no Obsidian ou basta uma pasta simples? *Recomende a pasta simples e explique o motivo (ver `arquiteturas.md` → "Pasta simples ou Obsidian"). Se escolher Obsidian, pergunte se prefere links `[[wikilink]]` ou links Markdown comuns; recomende os comuns.*
 - Trabalha em mais de um computador? *Afeta a sincronização e os caminhos absolutos nos hooks.*
 
 ### Bloco D — Local, privacidade e backup
@@ -90,3 +95,5 @@ Use quando o usuário escolher "rápido". O resto recebe os padrões da tabela n
 | Conduta | Planejar e pedir aprovação para tarefas grandes; executar direto as pequenas |
 | Git | Sim para usuários técnicos; não para os demais |
 | Local | `~/SegundoCerebro` (Windows: `%USERPROFILE%\SegundoCerebro`) |
+| Visualização | Pasta simples |
+| Links | Markdown com caminho relativo |

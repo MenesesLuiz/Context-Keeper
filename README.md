@@ -1,4 +1,4 @@
-# 🧠 Segundo Cérebro para IA
+# 🧠 context-keeper — Segundo Cérebro para IA
 
 > Uma skill que monta, na sua máquina, um segundo cérebro **feito para a IA** — e que se alimenta sozinho.
 
@@ -10,7 +10,11 @@ Esta skill resolve isso. Ela entrevista você, propõe um plano (**você escolhe
 - **Regras de alimentação**: a IA registra decisões, estado dos projetos, descobertas e as suas preferências sem você precisar pedir.
 - **Automação** (Claude Code): o contexto é reinjetado logo após cada compactação, e a IA é lembrada de fazer um *checkpoint* quando a conversa fica longa.
 
-Tudo em Markdown puro, compatível com o Obsidian — que continua funcionando como visualizador, se você quiser.
+Tudo em Markdown puro, numa pasta comum do seu computador.
+
+### E o Obsidian?
+
+Não é necessário. A IA lê e escreve os arquivos direto do disco e não abre o Obsidian como uma pessoa faria, então para ela o Obsidian não muda nada. Por isso o padrão recomendado é **uma pasta simples**. Se você gosta do Obsidian para navegar pelas notas, a skill oferece essa opção e explica como configurar. Também dá para abrir a pasta no Obsidian depois, a qualquer momento.
 
 ## Como funciona
 
@@ -33,14 +37,18 @@ Tudo em Markdown puro, compatível com o Obsidian — que continua funcionando c
 
 ## Instalação
 
-**Claude Code** — copie a pasta `second-brain/` para a sua pasta de skills:
+**Claude Code (recomendado: como plugin).** Numa sessão do Claude Code:
 
-```bash
-git clone https://github.com/<seu-usuario>/<este-repo>.git
-cp -r <este-repo>/second-brain ~/.claude/skills/
+```
+/plugin marketplace add MenesesLuiz/Context-Keeper
+/plugin install context-keeper@context-keeper
 ```
 
-**Claude.ai / Claude Desktop** — compacte a pasta `second-brain/` em `.zip` e envie em *Configurações → Capacidades → Skills*.
+O plugin traz a skill, os atalhos `/context-keeper:checkpoint` e `/context-keeper:review` e os hooks de automação. Os hooks ficam inativos até você criar o seu cérebro.
+
+**Claude Code (como skill avulsa).** Copie `skills/context-keeper/` para `~/.claude/skills/`. Tudo funciona, mas a automação do nível 3 exige que a skill edite o seu `~/.claude/settings.json` (com backup).
+
+**Claude.ai / Claude Desktop.** Compacte a pasta `skills/context-keeper/` em `.zip` e envie em *Configurações → Capacidades → Skills*. Nesses apps não há hooks: o cérebro funciona até o nível 2.
 
 ## Uso
 
@@ -63,7 +71,7 @@ SegundoCerebro/
 ├── Diario/           uma entrada por sessão relevante
 ├── Templates/        modelos de nota
 ├── Arquivo/          o que foi concluído (nada é apagado)
-└── .cerebro/         config, scripts dos hooks, estado
+└── .context-keeper/  config, estado dos hooks
 ```
 
 ## Privacidade
@@ -73,12 +81,20 @@ Tudo fica **no seu computador**. A skill não envia nada para lugar nenhum, faz 
 ## Estrutura do repositório
 
 ```
-second-brain/
+.claude-plugin/              plugin.json e marketplace.json
+skills/context-keeper/
 ├── SKILL.md                 fluxo principal e modos
 ├── references/              entrevista, arquiteturas, plano, integrações, alimentação, importação, manutenção
 ├── assets/templates/        modelos dos arquivos do cérebro
-├── assets/hooks/            trecho de hooks para o Claude Code
-└── scripts/                 session-start.sh, checkpoint-stop.sh, brain-lint.sh
+├── assets/hooks/            hooks para quem instala como skill avulsa
+└── scripts/                 lib.sh, session-start.sh, checkpoint-stop.sh, brain-lint.sh
+hooks/hooks.json             hooks do plugin (SessionStart e Stop)
+commands/                    /context-keeper:checkpoint e /context-keeper:review
+tests/skill-evals.json       cenários de teste da skill
 ```
+
+## Licença
+
+[MIT](LICENSE)
 
 Veja o [ROADMAP.md](ROADMAP.md) para o que vem a seguir.

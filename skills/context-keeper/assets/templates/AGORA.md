@@ -14,13 +14,13 @@ atualizado: {{DATA}}
 ## Assuntos ativos
 | Assunto | Fase | Próximo passo |
 |---|---|---|
-| [[{{PROJETO}}]] | {{FASE}} | {{PROXIMO_PASSO}} |
+| [{{PROJETO}}](Projetos/{{PROJETO}}/Indice.md) | {{FASE}} | {{PROXIMO_PASSO}} |
 
 ## Pendências
 - [ ] {{PENDENCIA}}
 
 ## Últimas decisões
-- {{DATA}} — {{DECISAO}} → [[{{NOTA_DA_DECISAO}}]]
+- {{DATA}} — {{DECISAO}} → [nota]({{CAMINHO_DA_NOTA_DA_DECISAO}})
 
 ## Último checkpoint
 {{DATA}} — {{RESUMO_EM_UMA_LINHA}}

@@ -13,7 +13,7 @@ O script aponta:
 - notas sem frontmatter;
 - notas com `atualizado:` antigo (padrão: 60 dias);
 - itens parados na `Inbox/` há mais de 14 dias;
-- `[[links]]` que apontam para notas inexistentes;
+- links (Markdown ou `[[wikilinks]]`) que apontam para notas inexistentes;
 - possíveis segredos (padrões como `api_key`, `senha:`, `sk-`, `ghp_`).
 
 ## 2. Revisão com julgamento (o que o script não vê)

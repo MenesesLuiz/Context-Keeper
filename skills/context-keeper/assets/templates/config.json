@@ -1,0 +1,22 @@
+{
+  "skill_version": "0.1.0",
+  "created": "{{DATA}}",
+  "brain_path": "{{CEREBRO}}",
+  "language": "pt-BR",
+  "structure": "por-assunto",
+  "viewer": "pasta",
+  "link_style": "markdown",
+  "automation_level": 3,
+  "install_mode": "plugin",
+  "write_autonomy": "escrever-e-avisar",
+  "git": false,
+  "files": {
+    "root": "CEREBRO.md",
+    "now": "AGORA.md",
+    "journal": "Diario"
+  },
+  "integrations": [
+    { "tool": "claude-code", "file": "~/.context-keeper/config", "kind": "ponteiro-do-cerebro" },
+    { "tool": "claude-code", "file": "~/.claude/CLAUDE.md", "kind": "import-das-regras", "backup": "~/.claude/CLAUDE.md.bak-{{DATA}}" }
+  ]
+}

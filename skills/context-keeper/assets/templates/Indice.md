@@ -24,4 +24,4 @@ tags: []
 - Decisões: pasta `Decisoes/`
 
 ## Notas
-- [[{{NOTA}}]] — {{DO_QUE_SE_TRATA}}
+- [{{NOTA}}]({{NOTA}}.md) — {{DO_QUE_SE_TRATA}}

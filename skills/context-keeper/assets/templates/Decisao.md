@@ -20,4 +20,4 @@ tags: []
 
 **Consequências:** o que muda a partir daqui e o que fica para revisar depois.
 
-<!-- Se for substituída: status: substituida e "Substituída por [[AAAA-MM-DD-nova-decisao]]" -->
+<!-- Se for substituída: status: substituida e "Substituída por [AAAA-MM-DD-nova-decisao](AAAA-MM-DD-nova-decisao.md)" -->
