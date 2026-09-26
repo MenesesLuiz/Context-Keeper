@@ -13,7 +13,7 @@ How to run it:
 
 ## Quick path (5 questions)
 
-Use it when the user picks "quick". Everything else takes the defaults at the end of this file.
+The default. Start with these questions directly — do not spend a round asking "quick or full?". Skip any question the user's first message already answered, and mention in one line that a fuller interview is available if they want to fine-tune. Everything not asked takes the defaults at the end of this file.
 
 1. **What do you use AI for the most?** (multiple choice: programming, studies, office work, content creation, research, personal life and organization)
 2. **Which projects or subjects are active right now?** (free text: "list 1 to 5, one line each")
@@ -28,6 +28,8 @@ Use it when the user picks "quick". Everything else takes the defaults at the en
 ---
 
 ## Full path
+
+Use it only when the user asks for it, or when their answers show needs the defaults do not cover (sensitive data, several machines, many ongoing areas).
 
 ### A — About you
 *Why:* becomes the profile note. It is the context every AI should have and never does.

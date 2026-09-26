@@ -18,9 +18,9 @@ Current version: **0.2.0 (in development)**
 - [x] **Phase 3 — English and simplification:** skill in English with 4 modes and 6 references, templates in `pt-BR/` and `en/`, hook messages in the brain's language, READMEs in English and Portuguese.
 - [ ] **Phase 4 — Real tests:**
   - load the plugin in a real session (`claude --plugin-dir .`);
-  - adopt a hand-made brain in a copy first;
-  - run the scenarios in `tests/skill-evals.json` with and without the skill;
-  - tune `CONTEXT_KEEPER_CHECKPOINT_BYTES` using real transcript sizes.
+  - adopt a hand-made brain end to end (persona `leo-adota`);
+  - run the scenarios in `tests/skill-evals.json` with and without the skill, against the fictional personas from `tests/make-personas.sh` (each test only sees its persona's simulated home);
+  - [x] tune the checkpoint trigger with real transcripts: bytes were a poor proxy (a 16x byte growth for a 2x context growth), so the trigger now measures context tokens from the transcript's `usage` (default: 50,000 tokens of growth, `CONTEXT_KEEPER_CHECKPOINT_TOKENS`).
 - [ ] **Phase 5 — Release:** GitHub description and topics, tag `v0.2.0`, clean install from the marketplace, optional submission to Anthropic's community marketplace.
 
 ## Later (0.3+)

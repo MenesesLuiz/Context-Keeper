@@ -54,9 +54,10 @@ Why each piece exists:
 
 ## Option C — Adopt the existing structure
 
-For users who already have a brain or a vault. Map the concepts instead of reorganizing:
+For users who already have a notes folder written for an AI (a root file of rules, such as `Claude.md` or `AGENTS.md`). A plain Obsidian vault is different: by default it is material to import (Mode 3) into a new, lean brain; adopt it in place only if it is small (under ~200 notes) and already well organized. Map the concepts instead of reorganizing:
 - Existing root file (`Claude.md`, `README.md`, `Home.md`) → acts as the root file; propose adding what is missing (feeding protocol, map).
 - Main note of each folder → acts as the index note; propose a "Current state" section if missing.
+- Keep the user's link style (`[[wikilinks]]` or regular links) and record it in `config.json` → `link_style`.
 - Propose only the missing core pieces (usually the now file, the profile, the journal and `.context-keeper/`), and record the real names in `.context-keeper/config.json` → `files`.
 
 ---
@@ -105,6 +106,8 @@ Tell the user what each level **does** and what it **touches** on their computer
 - **Does, on top of level 2:**
   - At session start **and right after every compaction**, loads the now file and the latest journal entry into context: the AI "wakes up" knowing where it stopped.
   - When the conversation has grown a lot since the last checkpoint, asks the AI to run one before finishing its answer, so the state reaches the brain before compaction summarizes it.
-- **Touches:** installed as a plugin, nothing beyond level 2 (the hooks ship with the plugin and read the pointer). Installed as a standalone skill, also `~/.claude/settings.json` (merge, with backup) and scripts in `<Brain>/.context-keeper/scripts/`.
+- **Touches:** everything level 2 touches (the pointer and the `~/.claude/CLAUDE.md` import), plus:
+  - installed as a plugin: nothing else — the hooks ship with the plugin and find the brain through the pointer;
+  - installed as a standalone skill: `~/.claude/settings.json` (merge, with backup) and scripts in `<Brain>/.context-keeper/scripts/`.
 - **Requires:** `bash` (on Windows it ships with Git for Windows, which Claude Code already requires).
 - **Cost:** a few seconds per checkpoint and ~1–2 thousand tokens per session for the hot context.

@@ -13,7 +13,7 @@ General rule for any file outside the brain:
 
 Tool paths and menus change often. If something below does not match what you find on the user's machine, check the tool's current documentation before going on.
 
-Use `/` in paths even on Windows (e.g. `E:/SecondBrain`), because the scripts run in bash.
+Use `/` in paths even on Windows (e.g. `D:/Notes/Brain`), because the scripts run in bash.
 
 In the blocks below, `<BRAIN>` is the brain path and `<ROOT>` is its root file name (`BRAIN.md`, `CEREBRO.md`, or the adopted one). Write the block text in the user's language.
 
@@ -38,7 +38,7 @@ The `@path` line imports the file into context. To check it worked, the user can
 
 ### Level 3 — hooks
 
-First make sure the pointer `~/.context-keeper/config` exists (`brain_path=<BRAIN>`). Then it depends on how the skill was installed:
+Level 3 always includes level 2: set up the global import above first. Then make sure the pointer `~/.context-keeper/config` exists (`brain_path=<BRAIN>`). Then it depends on how the skill was installed:
 
 **As a plugin (recommended).** The `context-keeper` plugin ships the hooks in `hooks/hooks.json`. They stay inactive until the pointer exists and start working in the next session. Do not edit `~/.claude/settings.json`.
 
@@ -54,7 +54,7 @@ The output must be short and contain the now file.
 
 What each hook does:
 - **SessionStart** (`session-start.sh`): runs when a session starts, resumes, is cleared or is **compacted**. What it prints (Claude Code accepts up to 10,000 characters; the script cuts at 8,000) enters the AI's context. After a compaction, it adds a note telling the AI to resume from the now file.
-- **Stop** (`checkpoint-stop.sh`): runs when the AI finishes an answer. If the transcript grew more than the limit (default ~300 KB) since the last checkpoint, it returns an `additionalContext` asking the AI to run a checkpoint before stopping. The user sees it as "Stop hook feedback", not as an error. It has loop protection (`stop_hook_active`) and fires again only after new growth. The limit can be changed with `CONTEXT_KEEPER_CHECKPOINT_BYTES`.
+- **Stop** (`checkpoint-stop.sh`): runs when the AI finishes an answer. It reads the current context size in tokens from the transcript (the last response's `usage`). If the context grew more than the limit (default 50,000 tokens) since the last checkpoint, it returns an `additionalContext` asking the AI to run a checkpoint before stopping. The user sees it as "Stop hook feedback", not as an error. It has loop protection (`stop_hook_active`), fires again only after new growth, and follows the context down after a compaction. The limit can be changed with `CONTEXT_KEEPER_CHECKPOINT_TOKENS`.
 
 File names and the hook messages' language come from `.context-keeper/config.json` (`files`, `language`), so the scripts work in any language and in adopted brains (e.g. a `Claude.md` root).
 

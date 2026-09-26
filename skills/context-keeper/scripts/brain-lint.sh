@@ -78,8 +78,8 @@ fi
 # 4. Broken links
 section "Broken links"
 existing="$(find . -type f -not -path './.git/*' -not -path './.obsidian/*' | sed 's#.*/##; s#\.md$##' | sort -u)"
-links_report="${TMPDIR:-/tmp}/brain-lint-links.$$"
-while IFS= read -r -d '' f; do
+# Collected in a variable (no temp file), so the check never writes outside the brain.
+links_report="$(while IFS= read -r -d '' f; do
   dir="$(dirname "$f")"
   # Skip examples inside code blocks and `inline code`.
   text="$(awk '/^[[:space:]]*```/ { inside = !inside; next } !inside' "$f" | sed 's/`[^`]*`//g')"
@@ -103,12 +103,13 @@ while IFS= read -r -d '' f; do
     [ -z "$target" ] && continue
     [ -e "$dir/$target" ] || echo "- ${f#./} → ($target)"
   done
-done < <(notes) > "$links_report"
-if [ -s "$links_report" ]; then
-  cat "$links_report"
-  issues=$((issues + $(wc -l < "$links_report")))
+done < <(notes))"
+if [ -n "$links_report" ]; then
+  printf '%s
+' "$links_report"
+  issues=$((issues + $(printf '%s
+' "$links_report" | wc -l)))
 fi
-rm -f "$links_report"
 
 # 5. Possible secrets (shows only file and line, never the value)
 section "Possible secrets"

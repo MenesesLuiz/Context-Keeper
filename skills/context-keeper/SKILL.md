@@ -43,16 +43,19 @@ When a case is not covered by the steps below, decide from these.
 
 Six steps. Never skip step 3: the plan approval is what keeps the user in charge.
 
-1. **Detect, silently.** Find out what you can before asking anything:
+1. **Detect, silently.** Find out what you can before asking anything. Look only in the user's home folder (top level, Documents, Desktop) and in paths the user mentioned — never scan other drives or other people's folders:
    - operating system and home folder;
    - AI tools present (`~/.claude/`, `~/.claude/CLAUDE.md`, `~/.codex/`, `~/.gemini/`, Cursor);
    - an existing brain: first `~/.context-keeper/config`, then folders with `BRAIN.md`, `CEREBRO.md`, `Claude.md`, `AGENTS.md` or `.context-keeper/config.json`;
    - an Obsidian vault (a folder with `.obsidian/`);
    - `bash` (needed for the hooks; on Windows it ships with Git for Windows, which Claude Code already requires).
 
-   If a brain exists, switch to **adopt**: keep everything the user made, map it to this skill's concepts (e.g. their `Claude.md` acts as the root file) and propose only what is missing. If it was created by this skill, read `.context-keeper/config.json` and ask what they want to change. Never overwrite existing notes.
+   Then decide how to start:
+   - **A brain exists** (a notes folder already written for an AI, with a root file of rules): switch to **adopt**. Keep everything the user made, map it to this skill's concepts (e.g. their `Claude.md` acts as the root file), keep their link style, and propose only what is missing. If it was created by this skill, read `.context-keeper/config.json` and ask what they want to change. Never overwrite existing notes.
+   - **An Obsidian vault or notes folder exists, but not for an AI:** treat it as **material to import** (Mode 3) into a new, lean brain. Offer adopting the vault in place as the alternative only when it is small (under ~200 notes) and already well organized.
+   - **A tool the user named was not found:** trust the user — it may be installed somewhere you did not look. Confirm it in the interview and plan its integration as a manual step if needed. Never assume the user is wrong about their own tools.
 
-2. **Interview.** Follow `references/interview.md`. Offer the quick path (5 questions) or the full one, ask at most 3–4 questions per round, and use `AskUserQuestion` when available.
+2. **Interview.** Follow `references/interview.md`. Start directly with the quick-path questions, skipping any the user already answered; mention in one line that a fuller interview is available. Ask at most 3–4 questions per round, and use `AskUserQuestion` when available.
 
 3. **Plan.** Build the plan with the format at the end of `references/interview.md`, using `references/architectures.md` for the options. Present it and **wait for the user's choices**. Adjust and present again as many times as needed.
 

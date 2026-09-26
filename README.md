@@ -95,6 +95,7 @@ skills/context-keeper/
 hooks/hooks.json             plugin hooks (SessionStart and Stop)
 commands/                    /context-keeper:checkpoint and /context-keeper:review
 tests/skill-evals.json       test scenarios for the skill
+tests/make-personas.sh       fictional test users, each with a simulated home folder
 ```
 
 ## License
