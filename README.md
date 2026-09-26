@@ -48,6 +48,8 @@ You don't need it. The AI reads and writes the files straight from disk and does
 
 The plugin ships the skill, the `/context-keeper:checkpoint` and `/context-keeper:review` commands and the automation hooks. The hooks stay inactive until you create your brain.
 
+On Windows, install Claude Code with the official installer to get the `claude` command in your terminal. The executable bundled inside the Claude desktop app lives in a virtualized folder and does not work as a regular terminal command.
+
 **Claude Code (as a standalone skill).** Copy `skills/context-keeper/` into `~/.claude/skills/`. Everything works, but level 3 automation requires the skill to edit your `~/.claude/settings.json` (with a backup).
 
 **Claude.ai / Claude Desktop.** Zip the `skills/context-keeper/` folder and upload it under *Settings → Capabilities → Skills*. These apps have no hooks, so the brain works up to level 2.
@@ -67,16 +69,23 @@ The skill works in English and Portuguese. Brains in Portuguese use Portuguese f
 
 ```
 SecondBrain/
+├── CLAUDE.md         one line that loads BRAIN.md in Claude Code
 ├── BRAIN.md          rules, map and feeding protocol
 ├── NOW.md            current focus, open items, latest decisions
 ├── Profile/          who you are and how you like the AI to work
-├── Projects/<X>/     Index.md (Current state) + Decisions/
+├── Projects/         Projects-Map.md + one folder per project, with its files and its context
 ├── Inbox/            quick captures
 ├── Journal/          one entry per relevant session
 ├── Templates/        note templates
 ├── Archive/          finished work (nothing is deleted)
 └── .context-keeper/  config and hook state
 ```
+
+## Organize your projects inside the brain
+
+The brain works best as your workspace: each project in its own folder under `Projects/`, holding both the project's files (documents, code) and its context notes. The AI then has everything it needs in one place, and opening Claude Code inside any project folder loads the brain's rules automatically.
+
+The skill only **recommends** this and shows you the exact moves. It never moves, renames or deletes your files; you do it when you want, and until then the brain records where each project lives.
 
 ## Privacy
 

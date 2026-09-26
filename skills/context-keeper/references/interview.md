@@ -7,7 +7,7 @@ How to run it:
 - Offer clickable options with one marked as recommended, plus a free-text answer.
 - Explain technical terms in one sentence for non-technical users ("hook", "frontmatter", "JSON").
 - Speak the user's language; the brain will be built in it.
-- At the end, summarize the answers as a list and ask for confirmation before writing the plan.
+- Do not spend a round confirming the answers: section 1 of the plan ("What I understood") is the summary, and the user corrects it when replying to the plan.
 
 ---
 
@@ -15,15 +15,17 @@ How to run it:
 
 The default. Start with these questions directly — do not spend a round asking "quick or full?". Skip any question the user's first message already answered, and mention in one line that a fuller interview is available if they want to fine-tune. Everything not asked takes the defaults at the end of this file.
 
+Rounds: ask questions 1–4 in the first round (fewer if some are already answered). Question 5 is not asked on its own: present the automation levels as a choice inside the plan.
+
 1. **What do you use AI for the most?** (multiple choice: programming, studies, office work, content creation, research, personal life and organization)
-2. **Which projects or subjects are active right now?** (free text: "list 1 to 5, one line each")
+2. **Which projects or subjects are active right now, and where do their files live?** (free text: "list 1 to 5, one line each, with the folder if there is one"). Pre-fill with the project folders found during detection so the user only confirms.
 3. **Which AIs do you use?** (confirm what detection found: Claude Code, Claude Desktop/claude.ai, Cursor, Codex, Gemini CLI, ChatGPT, other)
 4. **Where should the brain live, and how do you want to view it?** Suggest a concrete path and offer:
    - **A plain folder on your computer (recommended).** Explain that the AI reads and writes the files straight from disk and does not open Obsidian the way a person does. For the AI, Obsidian changes nothing.
    - **Obsidian.** Only for *you* to browse the notes, see the graph and search. It can be added later by opening the same folder as a vault.
 
    Warn if the path is inside OneDrive/Dropbox: syncing is good for backup, but two machines editing at once can conflict.
-5. **How much can the AI do on its own?** Level 1 Manual, 2 Connected or 3 Automatic (see `architectures.md`). Recommend 3 for Claude Code users and 2 for everyone else.
+5. **How much can the AI do on its own?** Level 1 Manual, 2 Connected or 3 Automatic (see `architectures.md`). Recommend 3 for Claude Code users and 2 for everyone else. Asked inside the plan, not as a separate round.
 
 ---
 
@@ -91,7 +93,7 @@ Use it only when the user asks for it, or when their answers show needs the defa
 | Write autonomy | Write and tell |
 | New folders | Propose first |
 | Conduct | Plan and ask for approval on big tasks; do small ones directly |
-| Git | Yes for technical users, no for the others |
+| Git | Yes for technical users creating a new brain; no for the others. In adopt mode, always ask |
 | Location | `~/SecondBrain` (pt-BR: `~/SegundoCerebro`; Windows: under `%USERPROFILE%`) |
 
 ---
@@ -133,14 +135,19 @@ Present the plan in the conversation with this format, translated to the user's 
 - `~/.context-keeper/config` — pointer to the brain (new file)
 - `<file>` — <what changes> (backup at `<file>.bak-YYYY-MM-DD`)
 
-## 6. Starting content
+## 6. Your projects (recommendation — you move them, I don't)
+- Recommended organization: each project in its own folder under `Projects/`, with its files and its context notes (see `architectures.md` → "Organizing projects").
+- Suggested moves: `<current path>` → `<Brain>/Projects/<name>/...` (one line per project), plus any side effect to watch (paths in editors or scripts, cloud sync).
+- Until you move them, the brain records where each project lives today.
+
+## 7. Starting content
 - <subjects that get an index note with Current state>
 - <imports and how they will be triaged>
 
-## 7. What you will need to do
+## 8. What you will need to do
 - <manual steps, e.g. paste a rule into Cursor> (or "Nothing")
 
-## 8. How to undo
+## 9. How to undo
 - Delete `<path>` and `~/.context-keeper/`, and restore the backups listed in item 5.
 
 **Reply with your choices (e.g. "A + level 3") or ask for changes.**

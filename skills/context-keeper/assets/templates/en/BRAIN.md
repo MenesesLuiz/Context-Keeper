@@ -38,7 +38,7 @@ Detailed preferences: [Preferences](Profile/Preferences.md).
 ## 3. How to navigate
 
 1. Read this file and [NOW](NOW.md).
-2. Identify the subject of the request.
+2. Identify the subject of the request; if unsure which project, check `Projects/Projects-Map.md`.
 3. Open the subject folder's `Index.md` and read its "Current state" section.
 4. Follow the notes' links as needed, without reading whole folders for no reason.
 5. If the subject has no folder, record it in `Inbox/` and propose creating one to {{NAME}}.
@@ -47,10 +47,12 @@ Detailed preferences: [Preferences](Profile/Preferences.md).
 
 <!-- The skill adapts the tree to the chosen structure (By subject or PARA) and removes what does not exist. -->
 ```
+CLAUDE.md         one line that loads this file in Claude Code
 BRAIN.md          rules and map (this file)
 NOW.md            current focus, open items, latest decisions
 Profile/          About-me.md, Preferences.md
-Projects/<Name>/  Index.md (Current state) + Decisions/
+Projects/         Projects-Map.md + one folder per project:
+  <Name>/         Index.md (Current state, Where things are) + Decisions/ + the project's own files
 Research/         research useful to more than one project
 Inbox/            quick captures not yet sorted
 Journal/          YYYY-MM-DD.md, one entry per relevant session
@@ -83,6 +85,7 @@ Filter: *"In a new session, a month from now, would this help me act better?"* I
 | Something finished or changed status | "Current state" of the subject's `Index.md` |
 | {{NAME}} corrected something or stated a preference | [Preferences](Profile/Preferences.md) |
 | {{NAME}} said "note this", "remember this" | The right note or `Inbox/` |
+| A new project appeared, or its files are outside the brain | `Projects/Projects-Map.md` + suggest moving it under `Projects/` ({{NAME}} moves it, never the AI) |
 | Research produced conclusions | The subject's research note |
 | End of session, long conversation or checkpoint request | **Checkpoint** (below) |
 

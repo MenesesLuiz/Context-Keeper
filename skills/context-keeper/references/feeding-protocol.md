@@ -30,6 +30,8 @@ Not worth keeping:
 | The user said "note this", "remember this" | The right note if obvious, otherwise the Inbox |
 | Research produced conclusions | A research note in the subject (or in `Research/` if it serves several) |
 | A new subject came up | Inbox + propose a new folder to the user |
+| A new project appeared, or a project's files were found outside the brain | A line in the projects map, "Where things are" in its index note, and a one-line suggestion to move it under `Projects/` (the user moves it, never you) |
+| A project changed status, started or finished | Its line in the projects map |
 | End of session, long context, or the hook asked | Full **checkpoint** (below) |
 
 ## Write autonomy

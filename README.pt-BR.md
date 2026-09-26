@@ -48,6 +48,8 @@ Não é necessário. A IA lê e escreve os arquivos direto do disco e não abre 
 
 O plugin traz a skill, os atalhos `/context-keeper:checkpoint` e `/context-keeper:review` e os hooks de automação. Os hooks ficam inativos até você criar o seu cérebro.
 
+No Windows, instale o Claude Code pelo instalador oficial para ter o comando `claude` no terminal. O executável que vem dentro do app de desktop do Claude fica numa pasta virtualizada e não funciona como comando comum no terminal.
+
 **Claude Code (como skill avulsa).** Copie `skills/context-keeper/` para `~/.claude/skills/`. Tudo funciona, mas a automação do nível 3 exige que a skill edite o seu `~/.claude/settings.json` (com backup).
 
 **Claude.ai / Claude Desktop.** Compacte a pasta `skills/context-keeper/` em `.zip` e envie em *Configurações → Capacidades → Skills*. Esses apps não têm hooks, então o cérebro funciona até o nível 2.
@@ -67,16 +69,23 @@ A entrevista acontece em português, e o cérebro é criado com nomes em portugu
 
 ```
 SegundoCerebro/
+├── CLAUDE.md         uma linha que carrega o CEREBRO.md no Claude Code
 ├── CEREBRO.md        regras, mapa e protocolo de alimentação
 ├── AGORA.md          foco atual, pendências, últimas decisões
 ├── Perfil/           quem você é e como gosta que a IA trabalhe
-├── Projetos/<X>/     Indice.md (Estado atual) + Decisoes/
+├── Projetos/         Mapa-de-Projetos.md + uma pasta por projeto, com os arquivos e o contexto dele
 ├── Inbox/            capturas rápidas
 ├── Diario/           uma entrada por sessão relevante
 ├── Templates/        modelos de nota
 ├── Arquivo/          o que foi concluído (nada é apagado)
 └── .context-keeper/  configuração e estado dos hooks
 ```
+
+## Organize seus projetos dentro do cérebro
+
+O cérebro funciona melhor como o seu espaço de trabalho: cada projeto numa pasta própria dentro de `Projetos/`, com os arquivos do projeto (documentos, código) e as notas de contexto dele. Assim a IA tem tudo de que precisa num lugar só, e abrir o Claude Code dentro de qualquer projeto já carrega as regras do cérebro.
+
+A skill só **recomenda** essa organização e mostra os movimentos exatos. Ela nunca move, renomeia nem apaga seus arquivos: você faz isso quando quiser e, até lá, o cérebro registra onde cada projeto está.
 
 ## Privacidade
 

@@ -22,11 +22,27 @@ issues=0
 section() { echo; echo "## $1"; }
 warn() { echo "- $1"; issues=$((issues + 1)); }
 
-# Lists the notes, skipping system folders and templates.
+# Projects may keep their own code inside the brain: skip dependency/build folders and any
+# nested git repository (a project's code), so only the brain's notes are checked.
+repos="$(find . -mindepth 2 -name .git -prune -print 2>/dev/null | sed 's#/\.git$##')"
+in_repo() {
+  [ -n "$repos" ] || return 1
+  while IFS= read -r repo; do
+    case "$1" in "$repo"/*) return 0 ;; esac
+  done <<< "$repos"
+  return 1
+}
+
+# Lists the notes, skipping system folders, templates and project code.
 notes() {
-  find . -type f -name '*.md' \
+  find . \( -name node_modules -o -name .venv -o -name venv -o -name dist -o -name build \
+            -o -name vendor -o -name target -o -name __pycache__ -o -name .next \) -prune \
+    -o -type f -name '*.md' \
     -not -path './.git/*' -not -path './.obsidian/*' -not -path './.trash/*' \
-    -not -path './.context-keeper/*' -not -path './Templates/*' -print0
+    -not -path './.context-keeper/*' -not -path './Templates/*' -print |
+  while IFS= read -r f; do
+    in_repo "$f" || printf '%s\0' "$f"
+  done
 }
 
 echo "# Second brain check: $BRAIN"
@@ -55,7 +71,7 @@ cutoff="$(date -d "-$DAYS days" +%F 2>/dev/null || date -v-"$DAYS"d +%F 2>/dev/n
 total=0
 while IFS= read -r -d '' f; do
   total=$((total + 1))
-  case "$f" in "./$JOURNAL_DIR"/*|./Archive/*|./Arquivo/*|./4-Archive/*|./4-Arquivo/*|"./$ROOT_FILE") continue ;; esac
+  case "$f" in "./$JOURNAL_DIR"/*|./Archive/*|./Arquivo/*|./4-Archive/*|./4-Arquivo/*|"./$ROOT_FILE"|./CLAUDE.md|./AGENTS.md) continue ;; esac
   if [ "$(head -n1 "$f" | tr -d '\r')" != "---" ]; then
     warn "No frontmatter: ${f#./}"
     continue
@@ -113,8 +129,8 @@ fi
 
 # 5. Possible secrets (shows only file and line, never the value)
 section "Possible secrets"
-grep -rnIE \
-  --exclude-dir=.git --exclude-dir=.obsidian --exclude-dir=.context-keeper \
+grep -rnIE --include='*.md' \
+  --exclude-dir=.git --exclude-dir=.obsidian --exclude-dir=.context-keeper --exclude-dir=node_modules \
   '((api[_-]?key|secret|senha|password|passwd|token)[[:space:]]*[:=][[:space:]]*[^[:space:]{}]{8,})|(sk-[A-Za-z0-9_-]{20,})|(ghp_[A-Za-z0-9]{20,})|(AKIA[0-9A-Z]{16})' \
   . 2>/dev/null | cut -d: -f1,2 | while IFS= read -r hit; do
     echo "- Check: ${hit#./}"

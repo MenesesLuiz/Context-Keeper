@@ -38,7 +38,7 @@ Preferências detalhadas: [Preferências](Perfil/Preferencias.md).
 ## 3. Como navegar
 
 1. Ler este arquivo e o [AGORA](AGORA.md).
-2. Identificar o assunto do pedido.
+2. Identificar o assunto do pedido; na dúvida sobre qual projeto, consultar `Projetos/Mapa-de-Projetos.md`.
 3. Abrir o `Indice.md` da pasta do assunto e ler a seção "Estado atual".
 4. Seguir os links das notas conforme a necessidade, sem ler pastas inteiras sem motivo.
 5. Se o assunto não tiver pasta, registrar na `Inbox/` e propor a criação a {{NOME}}.
@@ -47,10 +47,12 @@ Preferências detalhadas: [Preferências](Perfil/Preferencias.md).
 
 <!-- A skill ajusta a árvore à estrutura escolhida (Por assunto ou PARA) e remove o que não existir. -->
 ```
+CLAUDE.md         uma linha que carrega este arquivo no Claude Code
 CEREBRO.md        regras e mapa (este arquivo)
 AGORA.md          foco atual, pendências, últimas decisões
 Perfil/           Sobre-mim.md, Preferencias.md
-Projetos/<Nome>/  Indice.md (Estado atual) + Decisoes/
+Projetos/         Mapa-de-Projetos.md + uma pasta por projeto:
+  <Nome>/         Indice.md (Estado atual, Onde estão as coisas) + Decisoes/ + os arquivos do próprio projeto
 Pesquisa/         estudos úteis para mais de um projeto
 Inbox/            capturas rápidas ainda não classificadas
 Diario/           AAAA-MM-DD.md, uma entrada por sessão relevante
@@ -83,6 +85,7 @@ Filtro: *"Numa sessão nova, daqui a um mês, isto me faria agir melhor?"* Se si
 | Algo foi concluído ou mudou de status | "Estado atual" do `Indice.md` do assunto |
 | {{NOME}} corrigiu algo ou declarou uma preferência | [Preferências](Perfil/Preferencias.md) |
 | {{NOME}} disse "anota", "lembra disso" | Nota certa ou `Inbox/` |
+| Surgiu um projeto novo, ou os arquivos dele estão fora do cérebro | `Projetos/Mapa-de-Projetos.md` + sugerir mover para `Projetos/` ({{NOME}} move, nunca a IA) |
 | Uma pesquisa gerou conclusões | Nota de pesquisa do assunto |
 | Fim de sessão, conversa longa ou pedido de checkpoint | **Checkpoint** (abaixo) |
 
