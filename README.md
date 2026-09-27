@@ -111,4 +111,4 @@ tests/make-personas.sh       fictional test users, each with a simulated home fo
 
 [MIT](LICENSE)
 
-See the [ROADMAP.md](ROADMAP.md) for what comes next.
+See the [CHANGELOG.md](CHANGELOG.md) for what changed and the [ROADMAP.md](ROADMAP.md) for what comes next.

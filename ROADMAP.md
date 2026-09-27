@@ -1,6 +1,6 @@
 # Roadmap
 
-Current version: **0.2.0 (in development)**
+Current version: **0.2.0**
 
 ## Decisions (2026-09-25)
 
