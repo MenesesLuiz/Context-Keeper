@@ -27,7 +27,12 @@ ck_json_value() {
 ck_first_existing() {
   kind="$1"; shift
   for name in "$@"; do
-    [ "$kind" "$BRAIN/$name" ] && { printf '%s' "$name"; return; }
+    if [ "$kind" "$BRAIN/$name" ]; then
+      # On case-insensitive disks (Windows, macOS) report the name as it is really written.
+      real="$(ls -1 "$BRAIN" 2>/dev/null | grep -ixF -- "$name" | head -n1)"
+      printf '%s' "${real:-$name}"
+      return
+    fi
   done
 }
 

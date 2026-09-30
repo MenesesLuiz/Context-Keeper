@@ -67,5 +67,56 @@ Próximo passo: tela de busca."
 note "$B/Projetos/Blog.md" "# Blog
 Blog pessoal sobre cozinha. Parado desde julho."
 
+# 6. mari-mapa (pt-BR, hand-made brain like a typical user's: neutral Claude.md whose map is
+#    outdated because folders were created by hand; tests the map in adopt mode)
+P="$TARGET/mari-mapa/home"
+B="$P/SegundoCerebro"
+note "$B/Claude.md" "# Segundo cérebro: escopo global
+
+Este arquivo é o ponto de partida de toda sessão. É neutro de propósito: não descreve nem favorece nenhum projeto.
+
+## 1. Regras de conduta
+1. Planejar antes de executar.
+2. Idioma: português do Brasil.
+
+## 2. Como navegar
+1. Ler este arquivo.
+2. Achar a pasta do assunto no mapa e ler a nota principal (Indice.md).
+
+## 3. Mapa da estrutura
+
+### Atual
+
+\`\`\`
+SegundoCerebro/
+├── Claude.md    ← este arquivo
+└── Projetos/    ← uma pasta por projeto
+\`\`\`
+
+## 4. Convenções
+- Datas AAAA-MM-DD.
+- Frontmatter em toda nota."
+note "$B/Faculdade/Calculo-2/Indice.md" "---
+tipo: area
+descricao: Cálculo 2 (listas, provas e resumos)
+criado: 2026-08-01
+atualizado: 2026-09-20
+---
+# Cálculo 2"
+mkdir -p "$B/Faculdade/Engenharia-de-Software"
+note "$B/Projetos/Robo-Movel/Indice.md" "---
+tipo: projeto
+status: em-andamento
+descricao: robô móvel autônomo com ESP32 e sensores ultrassônicos
+criado: 2026-07-10
+atualizado: 2026-09-28
+---
+# Robô móvel"
+mkdir -p "$B/Projetos/Robo-Movel/firmware/.git"
+note "$B/Projetos/Robo-Movel/firmware/README.md" "# firmware (repositório de código)"
+note "$B/Projetos/Site-Cliente/Escopo.md" "# Site da padaria
+Escopo combinado com o cliente."
+mkdir -p "$B/Trabalho/Estagio"
+
 echo "Personas created in $TARGET:"
 ls -1 "$TARGET"
