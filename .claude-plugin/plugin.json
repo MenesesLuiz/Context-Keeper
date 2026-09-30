@@ -1,6 +1,6 @@
 {
   "name": "context-keeper",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "Builds and maintains a local second brain for AI: a folder of Markdown notes that Claude loads in every session, reloads after every compaction and feeds on its own with decisions, project state and preferences.",
   "author": {
     "name": "MenesesLuiz",

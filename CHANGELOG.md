@@ -2,7 +2,9 @@
 
 All notable changes to this project are documented here. Dates use `YYYY-MM-DD`.
 
-## [0.3.0] — unreleased
+## [0.3.1] — unreleased
+
+The changes in this section were first distributed as 0.3.0, an intermediate development build that reached the marketplace without a release; installs that have it get this version after `/plugin marketplace update context-keeper`.
 
 ### Added
 - **The map**: the root `CLAUDE.md` holds a map of every folder, two levels deep (`Area/Project/`), one neutral line each. The AI finds any area or project by reading one file instead of searching the disk.
