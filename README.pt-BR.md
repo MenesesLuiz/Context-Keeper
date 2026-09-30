@@ -49,7 +49,7 @@ Não é necessário. A IA lê e escreve os arquivos direto do disco e não abre 
 
 O plugin traz a skill, os atalhos `/context-keeper:checkpoint`, `/context-keeper:map` e `/context-keeper:review` e os hooks de automação. Os hooks ficam inativos até você criar o seu cérebro.
 
-No Windows, instale o Claude Code pelo instalador oficial para ter o comando `claude` no terminal. O executável que vem dentro do app de desktop do Claude fica numa pasta virtualizada e não funciona como comando comum no terminal.
+No Windows, instale o Claude Code pelo instalador oficial para ter o comando `claude` no terminal. O executável que vem dentro do app de desktop do Claude fica numa pasta virtualizada e não funciona como comando comum no terminal. Não é preciso instalar o Git: os hooks usam o PowerShell que já vem no Windows.
 
 **Claude Code (como skill avulsa).** Copie `skills/context-keeper/` para `~/.claude/skills/`. Tudo funciona, mas a automação do nível 3 exige que a skill edite o seu `~/.claude/settings.json` (com backup).
 

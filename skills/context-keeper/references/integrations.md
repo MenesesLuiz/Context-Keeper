@@ -42,15 +42,17 @@ Level 3 always includes level 2: set up the global import above first. Then make
 
 **As a plugin (recommended).** The `context-keeper` plugin ships the hooks in `hooks/hooks.json`. They stay inactive until the pointer exists and start working in the next session. Do not edit `~/.claude/settings.json`.
 
+Each hook is registered twice: a bash version (macOS, Linux) and a PowerShell version (every Windows, with or without Git). Each version steps aside silently where it does not apply, so exactly one of them answers and the user never sees an error. Nothing needs to be installed.
+
 **As a standalone skill.**
-1. Copy the skill's `scripts/*.sh` (including `lib.sh`) to `<BRAIN>/.context-keeper/scripts/`.
+1. Copy the skill's `scripts/` files (`*.sh` and `*.ps1`, including both `lib` files) to `<BRAIN>/.context-keeper/scripts/`.
 2. Merge `assets/hooks/claude-settings.json` into `~/.claude/settings.json`, replacing `<BRAIN>` with the real path. If hooks already exist for the same events, **append** entries to the array instead of replacing it.
 
-**Test (both cases):**
+**Test (both cases):** feed `{"source":"compact"}` to the start hook and check that the output is short and contains the now file:
 ```bash
-echo '{"source":"startup"}' | bash "<scripts folder>/session-start.sh"
+echo '{"source":"compact"}' | bash "<scripts folder>/session-start.sh"
 ```
-The output must be short and contain the now file.
+On Windows: `'{"source":"compact"}' | powershell -NoProfile -ExecutionPolicy Bypass -File "<scripts folder>/session-start.ps1"`.
 
 What each hook does:
 - **SessionStart** (`session-start.sh`): runs when a session starts, resumes, is cleared or is **compacted**. Every time, it rebuilds the map in `CLAUDE.md` from the real folders (`update-map.sh`); if the map changed, it prints the new map, because Claude Code may have loaded the old file already. After a **compaction** it also prints the now file and the latest journal entry, so the AI resumes the work in progress. At a normal start with an up-to-date map it prints nothing: the neutral `CLAUDE.md` is the only entry point. Claude Code accepts up to 10,000 characters of hook output; the script cuts at 8,000.

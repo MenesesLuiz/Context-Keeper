@@ -29,7 +29,7 @@ Current version: **0.2.0**
 
 - `UserPromptSubmit` hook that loads a subject's index note when the prompt mentions a known project.
 - `SessionEnd` hook that logs sessions that ended without a checkpoint.
-- PowerShell versions of the scripts, for machines without bash.
+- [x] PowerShell versions of the hooks and the map script, for Windows without Git (0.3.0). `brain-lint` in PowerShell is still to do.
 - Scheduled maintenance reminder (monthly) using the tool's scheduled tasks.
 - MCP server for the brain (`search`, `read_state`, `record_decision`, `checkpoint`), so any MCP-capable AI can use it with the same rules.
 - Tested guides for Cursor, Codex, Gemini CLI and Claude Desktop.

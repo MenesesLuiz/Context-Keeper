@@ -5,7 +5,11 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bash \"<BRAIN>/.context-keeper/scripts/session-start.sh\" \"<BRAIN>\""
+            "command": "CONTEXT_KEEPER_HOOK=1 bash \"<BRAIN>/.context-keeper/scripts/session-start.sh\" \"<BRAIN>\"; exit 0"
+          },
+          {
+            "type": "command",
+            "command": "powershell -NoProfile -ExecutionPolicy Bypass -File \"<BRAIN>/.context-keeper/scripts/session-start.ps1\" \"<BRAIN>\"; exit 0"
           }
         ]
       }
@@ -15,7 +19,11 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bash \"<BRAIN>/.context-keeper/scripts/checkpoint-stop.sh\" \"<BRAIN>\""
+            "command": "CONTEXT_KEEPER_HOOK=1 bash \"<BRAIN>/.context-keeper/scripts/checkpoint-stop.sh\" \"<BRAIN>\"; exit 0"
+          },
+          {
+            "type": "command",
+            "command": "powershell -NoProfile -ExecutionPolicy Bypass -File \"<BRAIN>/.context-keeper/scripts/checkpoint-stop.ps1\" \"<BRAIN>\"; exit 0"
           }
         ]
       }

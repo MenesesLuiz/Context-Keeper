@@ -16,6 +16,12 @@
 # (default 8000; Claude Code accepts up to 10,000 characters).
 
 set -u
+# On Windows the PowerShell version of this hook runs instead (see hooks/hooks.json), so the
+# bash version steps aside when started as a hook there. Run by hand, it works everywhere.
+if [ "${CONTEXT_KEEPER_HOOK:-}" = "1" ]; then
+  case "$(uname -s 2>/dev/null)" in MINGW*|MSYS*|CYGWIN*) exit 0 ;; esac
+fi
+
 . "$(dirname "$0")/lib.sh"
 ck_resolve_brain "${1:-}" || exit 0
 ck_load_names
