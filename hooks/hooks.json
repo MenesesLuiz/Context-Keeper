@@ -5,11 +5,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "CONTEXT_KEEPER_HOOK=1 bash \"${CLAUDE_PLUGIN_ROOT}/skills/context-keeper/scripts/session-start.sh\"; exit 0"
-          },
-          {
-            "type": "command",
-            "command": "powershell -NoProfile -ExecutionPolicy Bypass -File \"${CLAUDE_PLUGIN_ROOT}/skills/context-keeper/scripts/session-start.ps1\"; exit 0"
+            "command": "bash \"${CLAUDE_PLUGIN_ROOT}/skills/context-keeper/scripts/session-start.sh\""
           }
         ]
       }
@@ -19,11 +15,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "CONTEXT_KEEPER_HOOK=1 bash \"${CLAUDE_PLUGIN_ROOT}/skills/context-keeper/scripts/checkpoint-stop.sh\"; exit 0"
-          },
-          {
-            "type": "command",
-            "command": "powershell -NoProfile -ExecutionPolicy Bypass -File \"${CLAUDE_PLUGIN_ROOT}/skills/context-keeper/scripts/checkpoint-stop.ps1\"; exit 0"
+            "command": "bash \"${CLAUDE_PLUGIN_ROOT}/skills/context-keeper/scripts/checkpoint-stop.sh\""
           }
         ]
       }

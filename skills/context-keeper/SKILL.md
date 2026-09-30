@@ -52,7 +52,7 @@ Six steps. Never skip step 3: the plan approval is what keeps the user in charge
    - an existing brain: first `~/.context-keeper/config`, then folders with `CLAUDE.md`, `AGENTS.md`, `BRAIN.md`, `CEREBRO.md` or `.context-keeper/config.json`;
    - an Obsidian vault (a folder with `.obsidian/`);
    - where the user's projects live (folders with code or documents, e.g. `~/code`, `Documents/<something>`) — only their names and locations, not their contents;
-   - nothing to install for the hooks: they run with `bash` on macOS and Linux and with the built-in PowerShell on Windows, with or without Git.
+   - `bash`, if the user has Claude Code (the hooks and scripts need it). On Windows it comes with Git for Windows, a prerequisite of this skill; if it is missing, include installing Git in the plan.
 
    Summarize what you found in 2–4 lines at the top of your first reply, so the user can correct it.
 
@@ -81,8 +81,8 @@ Six steps. Never skip step 3: the plan approval is what keeps the user in charge
    - the first journal entry recording the setup and the choices made, and the approved plan saved to `.context-keeper/setup-plan.md`.
 
 6. **Verify and hand off.**
-   1. Run the checker (`brain-lint.sh`; on Windows without bash, `update-map.ps1 -Check` plus your own review) and fix what it reports.
-   2. At level 3, run the start hook without the brain path, to test the pointer too, feeding it `{"source":"compact"}` on stdin (`session-start.sh`, or `session-start.ps1` on Windows). The output must contain the now file and stay under 8,000 characters. With `"startup"` and an up-to-date map, it prints nothing — that is expected.
+   1. Run `bash scripts/brain-lint.sh <brain>` and fix what it reports.
+   2. At level 3, run the start hook without the brain path, to test the pointer too: `echo '{"source":"compact"}' | bash scripts/session-start.sh`. The output must contain the now file and stay under 8,000 characters. With `"startup"` and an up-to-date map, it prints nothing — that is expected.
    3. Give the user a **one-screen guide**: where the brain lives, what happens automatically, 3–4 useful phrases ("save this to the brain", "what's in NOW?", "review the brain"), the recommended project organization with the exact moves for them to do (if their projects live elsewhere), and, if they chose Obsidian, how to open the folder as a vault.
    4. Suggest a real test: open a new session and ask "what was I working on?".
 
@@ -127,13 +127,7 @@ Also run it yourself, without being asked, right after creating a folder in the 
 
 ## Running the scripts
 
-The scripts live in this skill's `scripts/` folder. Each hook and the map script exist in two versions with the same behavior:
-
-- **macOS, Linux, or Windows with the Bash tool:** `bash scripts/update-map.sh <brain>` (add `--check` to only report).
-- **Windows, PowerShell tool** (on Windows without Git, Claude Code has no Bash tool): `powershell -NoProfile -ExecutionPolicy Bypass -File scripts/update-map.ps1 <brain>` (add `-Check`).
-- **No shell at all** (Claude Desktop, other AIs): do the same work by hand, as described in Mode 5.
-
-`brain-lint.sh` exists only for bash; on Windows without it, use `update-map.ps1 -Check` and review the rest (frontmatter, links, stale notes) yourself.
+The scripts live in this skill's `scripts/` folder and run with `bash` (on Windows, the Git Bash that comes with Git for Windows, a prerequisite of this skill): `bash scripts/update-map.sh <brain>` (add `--check` to only report). Where there is no shell at all (Claude Desktop, other AIs), do the same work by hand, as described in Mode 5.
 
 ## Files
 
@@ -145,11 +139,11 @@ The scripts live in this skill's `scripts/` folder. Each hook and the map script
 | `references/feeding-protocol.md` | Writing the root file's feeding rules, and Mode 2 |
 | `references/importing.md` | Mode 3 |
 | `references/maintenance.md` | Mode 4 |
-| `scripts/update-map.sh`, `.ps1` | Mode 5, Setup step 4, and the start hook: rebuilds the map in `CLAUDE.md` from the real folders (`--check` / `-Check` only reports) |
+| `scripts/update-map.sh` | Mode 5, Setup step 4, and the start hook: rebuilds the map in `CLAUDE.md` from the real folders (`--check` only reports) |
 | `assets/templates/pt-BR/`, `assets/templates/en/` | Brain files per language |
 | `assets/templates/config.json` | The brain's `.context-keeper/config.json` |
 | `assets/hooks/claude-settings.json` | Hooks for `~/.claude/settings.json` (level 3, standalone install only) |
-| `scripts/lib.sh`, `lib.ps1` | Shared by the scripts: finds the brain, its file names and language |
-| `scripts/session-start.sh`, `.ps1` | Hook: updates the map at every session start (prints it only if it changed) and reloads the now file and the journal after compaction |
-| `scripts/checkpoint-stop.sh`, `.ps1` | Hook: asks for a checkpoint when the conversation grew a lot since the last one |
+| `scripts/lib.sh` | Shared by the scripts: finds the brain, its file names and language |
+| `scripts/session-start.sh` | Hook: updates the map at every session start (prints it only if it changed) and reloads the now file and the journal after compaction |
+| `scripts/checkpoint-stop.sh` | Hook: asks for a checkpoint when the conversation grew a lot since the last one |
 | `scripts/brain-lint.sh` | Health check of the brain |

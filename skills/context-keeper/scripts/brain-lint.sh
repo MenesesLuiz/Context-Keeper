@@ -5,7 +5,8 @@
 # Without a folder, uses ~/.context-keeper/config.
 
 set -u
-. "$(dirname "$0")/lib.sh"
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"   # absolute, because the checker cd's into the brain
+. "$SCRIPT_DIR/lib.sh"
 DAYS="${2:-60}"
 MAX_ROOT_LINES=150
 MAX_NOW_LINES=60
@@ -67,7 +68,7 @@ fi
 
 # 1b. The map in the root file must match the real folders
 section "Map (root file)"
-map_status="$(bash "$(dirname "$0")/update-map.sh" "$BRAIN" --check 2>&1)"
+map_status="$(bash "$SCRIPT_DIR/update-map.sh" "$BRAIN" --check 2>&1)"
 case "$map_status" in
   *"up to date"*) printf '%s
 ' "$map_status" | sed 's/^map: /- /' ;;

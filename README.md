@@ -40,6 +40,10 @@ You don't need it. The AI reads and writes the files straight from disk and does
 
 ## Installation
 
+**Prerequisites (Claude Code):**
+- **Git.** The hooks and scripts run with `bash`. On macOS and Linux it is already there; on Windows, install [Git for Windows](https://git-scm.com/download/win), which brings Git Bash.
+- **Claude Code**, installed with the official installer. On Windows, the executable bundled inside the Claude desktop app lives in a virtualized folder and does not work as a regular terminal command.
+
 **Claude Code (recommended: as a plugin).** In a Claude Code session:
 
 ```
@@ -48,8 +52,6 @@ You don't need it. The AI reads and writes the files straight from disk and does
 ```
 
 The plugin ships the skill, the `/context-keeper:checkpoint`, `/context-keeper:map` and `/context-keeper:review` commands and the automation hooks. The hooks stay inactive until you create your brain.
-
-On Windows, install Claude Code with the official installer to get the `claude` command in your terminal. The executable bundled inside the Claude desktop app lives in a virtualized folder and does not work as a regular terminal command. Git is not required: the hooks use the PowerShell that comes with Windows.
 
 **Claude Code (as a standalone skill).** Copy `skills/context-keeper/` into `~/.claude/skills/`. Everything works, but level 3 automation requires the skill to edit your `~/.claude/settings.json` (with a backup).
 
@@ -101,7 +103,7 @@ skills/context-keeper/
 ├── references/              interview, architectures, integrations, feeding protocol, importing, maintenance
 ├── assets/templates/        brain files, in pt-BR/ and en/
 ├── assets/hooks/            hooks for standalone installs
-└── scripts/                 bash (.sh) and Windows PowerShell (.ps1) versions: lib, update-map, session-start, checkpoint-stop; brain-lint.sh
+└── scripts/                 lib.sh, update-map.sh, session-start.sh, checkpoint-stop.sh, brain-lint.sh
 hooks/hooks.json             plugin hooks (SessionStart and Stop)
 commands/                    /context-keeper:checkpoint, :map and :review
 tests/skill-evals.json       test scenarios for the skill

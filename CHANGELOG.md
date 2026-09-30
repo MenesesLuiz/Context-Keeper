@@ -15,11 +15,12 @@ All notable changes to this project are documented here. Dates use `YYYY-MM-DD`.
 - **Neutral session start**: the start hook updates the map and prints it only if it changed; it no longer loads the now file at every start. The now file is read on demand and reloaded only after a compaction.
 - Top-level folders are the areas of the user's life (University, Work, Projects...), each with an index note.
 
-- **Windows without Git**: PowerShell versions of the map script and of both hooks (`update-map.ps1`, `session-start.ps1`, `checkpoint-stop.ps1`, `lib.ps1`), written for the Windows PowerShell 5.1 that ships with Windows. Each hook is registered twice (bash and PowerShell); exactly one answers on each system and the other steps aside silently.
+- **Git is a documented prerequisite** (on Windows, Git for Windows brings the Git Bash that runs the hooks and scripts). One bash implementation is kept for every system.
 - The Claude Desktop guide uses the current menu names (*Settings > Extensions > Filesystem > Allowed Directories*, *Settings > Instructions for Claude*) and explains how to keep the map without scripts.
 
 ### Fixed
 - The map no longer shows a template placeholder as the description of `Templates/`.
+- The map has built-in descriptions for the PARA folders `2-Areas/` and `3-Recursos/` (`Areas`, `Resources`).
 
 ### Removed
 - The separate projects map (`Projects-Map.md` / `Mapa-de-Projetos.md`): the map in `CLAUDE.md` replaces it.

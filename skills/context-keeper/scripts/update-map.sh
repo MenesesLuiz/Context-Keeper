@@ -43,6 +43,8 @@ builtin_desc() {
         Templates) echo "modelos de nota" ;;
         Arquivo|Archive|4-Arquivo|4-Archive) echo "o que foi concluído ou abandonado" ;;
         Projetos|Projects|1-Projetos|1-Projects) echo "uma pasta por projeto" ;;
+        Areas|2-Areas) echo "responsabilidades contínuas, sem prazo de término" ;;
+        Recursos|Resources|3-Recursos|3-Resources) echo "temas de interesse e material de referência" ;;
         Pesquisa|Research) echo "estudos úteis para mais de um projeto" ;;
       esac ;;
     *)
@@ -56,6 +58,8 @@ builtin_desc() {
         Templates) echo "note templates" ;;
         Archive|Arquivo|4-Archive|4-Arquivo) echo "finished or abandoned work" ;;
         Projects|Projetos|1-Projects|1-Projetos) echo "one folder per project" ;;
+        Areas|2-Areas) echo "ongoing responsibilities with no end date" ;;
+        Resources|Recursos|3-Resources|3-Recursos) echo "topics of interest and reference material" ;;
         Research|Pesquisa) echo "research useful to more than one project" ;;
       esac ;;
   esac
