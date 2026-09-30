@@ -62,8 +62,11 @@ File names and the hook messages' language come from `.context-keeper/config.jso
 
 ## Claude Desktop (chat app) and claude.ai
 
-- **Claude Desktop:** enable the filesystem extension in the extensions settings and give it access to the brain folder. Then, in the profile's personal preferences (or in a Project's instructions), paste:
-  > I have a second brain at `<BRAIN>`. At the start of every conversation, read `<ROOT>` and the now file there and follow the rules in `<ROOT>`.
+- **Claude Desktop** (menus checked on 2026-09-30):
+  1. *Settings > Extensions*: install the **Filesystem** extension by Anthropic from the directory (if it is not installed yet), make sure it is enabled, and add the brain folder under **Allowed Directories**. Only the brain folder is needed.
+  2. *Settings > Instructions for Claude* (account-wide, applies to every conversation): paste the text below. For a single context, a Project's instructions work the same way, but only inside that Project.
+     > I have a second brain at `<BRAIN>`. At the start of every conversation, read `<ROOT>` in that folder and follow its rules. Use the map in `<ROOT>` to find folders; do not search the disk for them.
+  3. There are no hooks and no bash here: the AI keeps the map up to date by editing it in `<ROOT>` itself, following the rule "every new folder goes into the map right away". Tell the user they can ask "update the map" at any time.
 - **claude.ai on the web:** cannot read local files. One option is a Project with the root file, the now file and the profile uploaded as project knowledge — but it is a static copy that must be re-uploaded when it changes. Make this limit clear to the user.
 
 ## Cursor

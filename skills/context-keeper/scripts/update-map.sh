@@ -71,6 +71,8 @@ folder_desc() {
     [ -f "$f" ] || continue
     d="$(tr -d '\r' < "$f" | awk 'NR==1 && $0!="---" {exit} NR>1 && $0=="---" {exit} NR>1' \
          | sed -nE 's/^(descricao|description):[[:space:]]*//p' | head -n1 | sed -E 's/^["'\'']//; s/["'\'']$//')"
+    # A template copied into the folder (e.g. Templates/Indice.md) still has its placeholder.
+    case "$d" in *'{{'*) d="" ;; esac
     [ -n "$d" ] && { printf '%s' "$d"; return; }
   done
   builtin_desc "$name"

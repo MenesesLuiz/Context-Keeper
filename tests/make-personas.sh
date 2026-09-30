@@ -118,5 +118,86 @@ note "$B/Projetos/Site-Cliente/Escopo.md" "# Site da padaria
 Escopo combinado com o cliente."
 mkdir -p "$B/Trabalho/Estagio"
 
+# 7. ana-desktop (pt-BR, the student after setup at level 2, for testing the Claude Desktop guide:
+#    a ready brain built from the skill's templates, with a map, a now file and two subjects)
+P="$TARGET/ana-desktop/home"
+B="$P/SegundoCerebro"
+TPL="$(cd "$(dirname "$0")/.." && pwd)/skills/context-keeper/assets/templates/pt-BR"
+mkdir -p "$B/Perfil" "$B/Diario" "$B/Templates"
+sed -e 's/{{NOME}}/Ana/g' \
+    -e 's/{{REGRAS_DE_CONDUTA}}/1. Explicar sem jargão técnico.\n2. Revisar meus textos, nunca escrever o TCC por mim.\n3. Idioma: português do Brasil./' \
+    -e 's/{{CONVENCAO_DE_LINKS}}/links Markdown com caminho relativo (`[Texto](Pasta\/Nota.md)`)/' \
+    -e 's/{{AUTONOMIA}}/escrever e avisar em uma linha no fim da resposta ("Registrado: <o quê> em <onde>")./' \
+    -e 's/{{ESTRUTURA_PLANEJADA_OU_REMOVER_ESTA_SECAO}}/Uma pasta por disciplina dentro de `Faculdade\/`./' \
+    "$TPL/CLAUDE.md" | awk '/^<!--$/ && !done {skip=1} skip && /^-->$/ {skip=0; done=1; next} !skip' > "$B/CLAUDE.md"
+note "$B/AGORA.md" "---
+tipo: estado
+atualizado: 2026-09-29
+---
+
+# Agora
+
+## Foco atual
+- Revisar a introdução do TCC antes da reunião de quinta com a Profa. Marta.
+
+## Pendências
+- [ ] Prova 2 de Estatística em 2026-10-15.
+
+## Último checkpoint
+2026-09-29 — revisada a primeira metade da introdução do TCC."
+note "$B/Faculdade/Indice.md" "---
+tipo: area
+descricao: graduação em Engenharia de Produção: uma pasta por disciplina
+criado: 2026-08-10
+atualizado: 2026-09-29
+---
+
+# Faculdade"
+note "$B/Faculdade/TCC/Indice.md" "---
+tipo: area
+status: em-andamento
+descricao: TCC sobre acessibilidade em aplicativos de transporte público
+criado: 2026-09-01
+atualizado: 2026-09-29
+---
+
+# TCC
+
+## Estado atual
+*Atualizado em 2026-09-29*
+
+- **Fase:** escrita da introdução.
+- **Orientadora:** Profa. Marta, reuniões às quintas.
+- **Entrega final:** 2026-12-01.
+- **Próximo passo:** terminar a revisão da introdução.
+
+## Onde estão as coisas
+- Rascunhos: \`Documents/Faculdade/TCC/\` (fora do cérebro; sugerido mover para esta pasta)."
+note "$B/Faculdade/Estatistica/Indice.md" "---
+tipo: area
+status: em-andamento
+descricao: disciplina de Estatística (listas e provas)
+criado: 2026-08-10
+atualizado: 2026-09-20
+---
+
+# Estatística
+
+## Estado atual
+- **Próxima prova:** Prova 2 em 2026-10-15."
+sed -e 's/{{NOME}}/Ana/g' -e 's/{{DATA}}/2026-09-29/g' "$TPL/Preferencias.md" > "$B/Perfil/Preferencias.md"
+note "$B/Diario/2026-09-29.md" "---
+tipo: diario
+criado: 2026-09-29
+---
+
+# 2026-09-29
+
+## 20:10 — TCC
+- **Feito:** revisada a primeira metade da introdução.
+- **Próximo passo:** revisar a segunda metade."
+cp "$TPL"/Decisao.md "$TPL"/Indice.md "$TPL"/Diario.md "$B/Templates/" 2>/dev/null || true
+bash "$(dirname "$0")/../skills/context-keeper/scripts/update-map.sh" "$B" >/dev/null
+
 echo "Personas created in $TARGET:"
 ls -1 "$TARGET"

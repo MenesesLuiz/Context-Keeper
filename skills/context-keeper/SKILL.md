@@ -117,7 +117,7 @@ Follow `references/maintenance.md`:
 
 Keeps the map in `CLAUDE.md` true to the real folders:
 
-1. Run `bash scripts/update-map.sh <brain>`. It rewrites only the part between the map markers. If the markers are missing, propose where to add them and wait for approval.
+1. Run `bash scripts/update-map.sh <brain>`. It rewrites only the part between the map markers. If the markers are missing, propose where to add them and wait for approval. Where scripts cannot run (Claude Desktop, AIs without a shell), do the same by hand: list the folders two levels deep, take each description from the `descricao:`/`description:` line of the folder's index note, and rewrite only the block between the markers in the same tree format.
 2. For each folder "without description", propose a one-line, neutral description (what the folder is, not its status) and, after approval, write it in the folder's index note (create the note from the template if needed). Run the script again.
 3. Tell the user in 2–4 lines what changed.
 
