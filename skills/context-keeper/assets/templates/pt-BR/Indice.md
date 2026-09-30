@@ -1,6 +1,7 @@
 ---
 tipo: projeto
 status: ideia
+descricao: {{O_QUE_E_ESTA_PASTA_EM_UMA_LINHA_NEUTRA}}
 criado: {{DATA}}
 atualizado: {{DATA}}
 tags: []

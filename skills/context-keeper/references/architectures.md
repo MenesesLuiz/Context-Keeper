@@ -1,16 +1,13 @@
 # Architectures: structure, viewing and automation levels
 
-File and folder names below are the English ones. For a Portuguese brain, use the names from `assets/templates/pt-BR/` (section 4 of `CEREBRO.md` has the tree).
+File and folder names below are the English ones. For a Portuguese brain, use the names from `assets/templates/pt-BR/` (`AGORA.md`, `Perfil/`, `Diario/`, `Arquivo/`, `Projetos/`, `Decisoes/`). The root file is `CLAUDE.md` in every language.
 
 ## Core (present in every structure)
 
 ```
 <Brain>/
-├── CLAUDE.md         one line, `@BRAIN.md` (only for Claude Code users; see below)
-├── BRAIN.md          HOT: rules, map and feeding protocol (under ~150 lines)
-├── NOW.md            HOT: current focus, open items, latest decisions (under ~60 lines)
-├── Projects/
-│   └── Projects-Map.md   WARM: every project, one line each (status, next step, link)
+├── CLAUDE.md         HOT: rules, navigation and the map of every folder (under ~150 lines)
+├── NOW.md            current focus, open items, latest decisions (read on demand; under ~60 lines)
 ├── Profile/
 │   ├── About-me.md       who the user is
 │   └── Preferences.md    how they like the AI to work (grows with every correction)
@@ -22,18 +19,17 @@ File and folder names below are the English ones. For a Portuguese brain, use th
 ```
 
 Why each piece exists:
-- **Root file separate from the now file**: rules change rarely, state changes every session. Keeping them apart avoids rewriting the rules at every checkpoint and lets the hook reload only the now file after compaction.
+- **`CLAUDE.md` as the root, neutral on purpose**: it is the only file loaded at every start. Claude Code loads it from the folder it is opened in and from every parent folder, so it also loads when working inside any project in the brain. It never describes or favors a subject: its map has one line per folder saying what the folder is, and each subject's context stays inside its folder.
+- **The map**: the AI's table of contents, two levels deep (`Area/Project/`). With it, "open the mobile robot project" costs one line of reading instead of a search through the disk. It is rebuilt from the real folders by `update-map.sh` (at every session start through the hook, on `/context-keeper:map`, and by the AI after creating a folder), so folders created by hand also appear. Descriptions come from each folder's index note (`description:`).
+- **Now file separate from the root**: state changes every session; rules and the map do not. The now file is not loaded at start, so the AI is not pushed toward the latest project; it is read on demand and reloaded by the hook after a compaction, when work is in progress.
 - **Preferences**: every "don't do X" or "I prefer Y" goes here. It is what stops the AI from repeating mistakes across sessions.
 - **Journal**: chronological and cheap to write. When it is unclear where something belongs, the journal makes sure it is not lost.
 - **Archive**: moving things out of the way without deleting keeps active areas small (fewer tokens when searching) and preserves history.
-- **Projects map**: the AI's table of contents for all projects, active or paused. The now file lists only what is active this week; the map lists everything and says where each project lives.
-- **`CLAUDE.md` in the root**: Claude Code loads `CLAUDE.md` from the folder it is opened in and from every parent folder. With this one-line file, opening Claude Code inside any project in the brain loads the brain's rules automatically.
 
 ## Option A — By subject (recommended to start)
 
 ```
 ├── Projects/
-│   ├── Projects-Map.md
 │   └── <Project-Name>/
 │       ├── Index.md      WARM: overview + "Current state" + "Where things are"
 │       ├── Decisions/    YYYY-MM-DD-title.md
@@ -56,7 +52,7 @@ Why each piece exists:
 
 - Good for: people mixing personal life, work and study, or who already know Tiago Forte's method.
 - "Does this have an end date?" decides between Project and Area. Explain that to the user.
-- Every project and area has its own index note with "Current state", and `1-Projects/` has the projects map.
+- Every project and area has its own index note with "Current state" and a one-line `description:` for the map.
 
 ## Option C — Adopt the existing structure
 
@@ -77,9 +73,8 @@ The brain works best as the user's workspace: every project in its own folder un
 ```
 <Brain>/
 ├── CLAUDE.md
-├── BRAIN.md, NOW.md, ...
+├── NOW.md, Profile/, Journal/, ...
 └── Projects/
-    ├── Projects-Map.md        one line per project
     ├── agentops/
     │   ├── Index.md           overview, Current state, Where things are
     │   ├── Decisions/
@@ -94,7 +89,7 @@ How to recommend it:
 - **Advise, never move.** Explain the benefit in one or two sentences, list the exact moves ("move `~/code/agentops` to `<Brain>/Projects/agentops/app`"), and let the user do it when they want. Never move, rename or delete the user's files yourself.
 - **Code repositories:** keep the repository in a subfolder of the project (e.g. `app/`), so the context notes do not mix with the repository's own files and history. If the brain uses git, add that subfolder to the brain's `.gitignore`.
 - **Warn about side effects** before the user moves code: open editors, scripts or deploy settings with absolute paths may need updating, and cloud-synced folders (OneDrive, Dropbox) handle `node_modules`, virtual environments and build folders badly.
-- **Until the user moves a project**, its index note's "Where things are" and its line in the projects map record the current location, so the AI can still find it.
+- **Until the user moves a project**, it still gets a folder under `Projects/` with its index note, and "Where things are" records the current location, so the map leads the AI to it.
 
 ---
 

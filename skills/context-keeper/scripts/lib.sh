@@ -40,7 +40,7 @@ ck_load_names() {
     JOURNAL_DIR="$(ck_json_value "$cfg" journal)"
     BRAIN_LANG="$(ck_json_value "$cfg" language)"
   fi
-  [ -n "$ROOT_FILE" ]   || ROOT_FILE="$(ck_first_existing -f BRAIN.md CEREBRO.md Claude.md CLAUDE.md AGENTS.md)"
+  [ -n "$ROOT_FILE" ]   || ROOT_FILE="$(ck_first_existing -f CLAUDE.md Claude.md BRAIN.md CEREBRO.md AGENTS.md)"
   [ -n "$NOW_FILE" ]    || NOW_FILE="$(ck_first_existing -f NOW.md AGORA.md)"
   [ -n "$JOURNAL_DIR" ] || JOURNAL_DIR="$(ck_first_existing -d Journal Diario)"
   if [ -z "$BRAIN_LANG" ]; then
@@ -48,6 +48,10 @@ ck_load_names() {
       *AGORA*|*CEREBRO*|*Diario*) BRAIN_LANG="pt-BR" ;;
       *) BRAIN_LANG="en" ;;
     esac
+    # The root is now CLAUDE.md in every language: look at its text as a last resort.
+    if [ "$BRAIN_LANG" = "en" ] && [ -n "$ROOT_FILE" ] &&        grep -qiE '(^|[^a-z])(você|não|pasta|projetos|sessão)([^a-z]|$)' "$BRAIN/$ROOT_FILE" 2>/dev/null; then
+      BRAIN_LANG="pt-BR"
+    fi
   fi
 }
 
@@ -60,6 +64,8 @@ ck_msg() {
         compacted)  fmt='O contexto desta sessão acabou de ser compactado. Retome pelo %s abaixo e, se precisar de detalhes, pelo índice do assunto. Se o trabalho feito antes da compactação ainda não estiver registrado, faça um checkpoint.' ;;
         rules)      fmt='Regras e protocolo de alimentação: %s' ;;
         journal)    fmt='## Última entrada do diário (%s)' ;;
+        map)        fmt='O mapa do cérebro (seção Atual do %s) foi atualizado com as pastas reais. Use-o para localizar áreas e projetos:' ;;
+        nodesc)     fmt='Pastas sem descrição no mapa:%s. Quando o assunto surgir, proponha ao usuário uma descrição de uma linha (campo descricao: no Indice.md da pasta).' ;;
         checkpoint) fmt='Checkpoint do segundo cérebro: esta conversa cresceu bastante desde o último registro. Antes de encerrar, faça um checkpoint seguindo o protocolo de alimentação de %s (decisões, Estado atual dos assuntos tocados, arquivo de estado atual, preferências e uma entrada no diário). Se nada relevante aconteceu desde o último checkpoint, diga isso em uma linha e encerre.' ;;
       esac ;;
     *)
@@ -68,6 +74,8 @@ ck_msg() {
         compacted)  fmt="This session's context was just compacted. Resume from %s below and, for details, from the subject's index note. If the work done before the compaction is not recorded yet, run a checkpoint." ;;
         rules)      fmt='Rules and feeding protocol: %s' ;;
         journal)    fmt='## Latest journal entry (%s)' ;;
+        map)        fmt="The brain's map (the current map section of %s) was updated from the real folders. Use it to find areas and projects:" ;;
+        nodesc)     fmt='Folders without a description in the map:%s. When the subject comes up, propose a one-line description to the user (description: field in the folder index note).' ;;
         checkpoint) fmt='Second brain checkpoint: this conversation has grown a lot since the last save. Before finishing, run a checkpoint following the feeding protocol in %s (decisions, current state of the subjects touched, the current-state file, preferences and a journal entry). If nothing relevant happened since the last checkpoint, say so in one line and stop.' ;;
       esac ;;
   esac

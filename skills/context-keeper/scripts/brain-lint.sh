@@ -51,7 +51,7 @@ echo "Date: $(date +%F)"
 # 1. Size of the hot context
 section "Hot context (loaded in every session)"
 if [ -z "$ROOT_FILE" ]; then
-  warn "No root file found (BRAIN.md, CEREBRO.md, Claude.md or AGENTS.md)."
+  warn "No root file found (CLAUDE.md, or a legacy BRAIN.md/CEREBRO.md/AGENTS.md)."
 else
   lines=$(wc -l < "$ROOT_FILE" | tr -d ' ')
   [ "$lines" -gt "$MAX_ROOT_LINES" ] && warn "$ROOT_FILE has $lines lines (recommended: up to $MAX_ROOT_LINES)."
@@ -64,6 +64,15 @@ if [ -n "$NOW_FILE" ]; then
 else
   warn "No now file (NOW.md or AGORA.md): the AI has nowhere to read where it stopped."
 fi
+
+# 1b. The map in the root file must match the real folders
+section "Map (root file)"
+map_status="$(bash "$(dirname "$0")/update-map.sh" "$BRAIN" --check 2>&1)"
+case "$map_status" in
+  *"up to date"*) printf '%s
+' "$map_status" | sed 's/^map: /- /' ;;
+  *) warn "$(printf '%s' "$map_status" | head -n1 | sed 's/^map: //')" ;;
+esac
 
 # 2. Frontmatter and stale notes
 section "Frontmatter and stale notes (older than $DAYS days)"

@@ -2,6 +2,22 @@
 
 All notable changes to this project are documented here. Dates use `YYYY-MM-DD`.
 
+## [0.3.0] — unreleased
+
+### Added
+- **The map**: the root `CLAUDE.md` holds a map of every folder, two levels deep (`Area/Project/`), one neutral line each. The AI finds any area or project by reading one file instead of searching the disk.
+- `scripts/update-map.sh` rebuilds the map from the real folders, between markers, without touching the rest of `CLAUDE.md`. Descriptions come from each folder's index note (`descricao:` / `description:`); `--check` only reports.
+- `/context-keeper:map` command (Mode 5): updates the map and asks for descriptions of new folders.
+- `brain-lint.sh` reports a map that no longer matches the folders.
+
+### Changed
+- **`CLAUDE.md` is the root file in every language**, modeled as a neutral global scope: purpose, rules of conduct, navigation, map (current and planned), conventions, feeding protocol and decisions. `BRAIN.md`/`CEREBRO.md` are gone for new brains (still detected in existing ones).
+- **Neutral session start**: the start hook updates the map and prints it only if it changed; it no longer loads the now file at every start. The now file is read on demand and reloaded only after a compaction.
+- Top-level folders are the areas of the user's life (University, Work, Projects...), each with an index note.
+
+### Removed
+- The separate projects map (`Projects-Map.md` / `Mapa-de-Projetos.md`): the map in `CLAUDE.md` replaces it.
+
 ## [0.2.0] — 2026-09-25
 
 First public release.

@@ -15,7 +15,7 @@ Tool paths and menus change often. If something below does not match what you fi
 
 Use `/` in paths even on Windows (e.g. `D:/Notes/Brain`), because the scripts run in bash.
 
-In the blocks below, `<BRAIN>` is the brain path and `<ROOT>` is its root file name (`BRAIN.md`, `CEREBRO.md`, or the adopted one). Write the block text in the user's language.
+In the blocks below, `<BRAIN>` is the brain path and `<ROOT>` is its root file name (`CLAUDE.md`, or the adopted one). Write the block text in the user's language.
 
 ---
 
@@ -34,7 +34,7 @@ My second brain lives at `<BRAIN>`. Its rules are below; follow them in every se
 
 The `@path` line imports the file into context. To check it worked, the user can run `/memory` in a new Claude Code session and see the root file listed.
 
-> Without this import, the root file only loads when Claude Code is opened inside the brain folder itself — a common gap in hand-made brains.
+> Without this import, the root file only loads when Claude Code is opened inside the brain folder or any folder under it (Claude Code reads `CLAUDE.md` from parent folders). If the user always works inside the brain — the recommended organization — the import is optional; offer it for people who also open Claude Code elsewhere. With both, the file may load twice, which only costs a few extra tokens.
 
 ### Level 3 — hooks
 
@@ -53,7 +53,7 @@ echo '{"source":"startup"}' | bash "<scripts folder>/session-start.sh"
 The output must be short and contain the now file.
 
 What each hook does:
-- **SessionStart** (`session-start.sh`): runs when a session starts, resumes, is cleared or is **compacted**. What it prints (Claude Code accepts up to 10,000 characters; the script cuts at 8,000) enters the AI's context. After a compaction, it adds a note telling the AI to resume from the now file.
+- **SessionStart** (`session-start.sh`): runs when a session starts, resumes, is cleared or is **compacted**. Every time, it rebuilds the map in `CLAUDE.md` from the real folders (`update-map.sh`); if the map changed, it prints the new map, because Claude Code may have loaded the old file already. After a **compaction** it also prints the now file and the latest journal entry, so the AI resumes the work in progress. At a normal start with an up-to-date map it prints nothing: the neutral `CLAUDE.md` is the only entry point. Claude Code accepts up to 10,000 characters of hook output; the script cuts at 8,000.
 - **Stop** (`checkpoint-stop.sh`): runs when the AI finishes an answer. It reads the current context size in tokens from the transcript (the last response's `usage`). If the context grew more than the limit (default 50,000 tokens) since the last checkpoint, it returns an `additionalContext` asking the AI to run a checkpoint before stopping. The user sees it as "Stop hook feedback", not as an error. It has loop protection (`stop_hook_active`), fires again only after new growth, and follows the context down after a compaction. The limit can be changed with `CONTEXT_KEEPER_CHECKPOINT_TOKENS`.
 
 File names and the hook messages' language come from `.context-keeper/config.json` (`files`, `language`), so the scripts work in any language and in adopted brains (e.g. a `Claude.md` root).

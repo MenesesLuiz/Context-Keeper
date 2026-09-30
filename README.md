@@ -8,7 +8,8 @@ Every AI forgets. After many messages the context gets compacted and details dis
 
 Context Keeper fixes that. It interviews you, proposes a plan (**you choose**) and builds:
 
-- **An entry point** the AI loads in every session, in any folder.
+- **An entry point** the AI loads in every session: a neutral `CLAUDE.md` with the rules and a **map of every folder**, so the AI goes straight to the right project instead of spending tokens searching your disk.
+- **A map that stays true**: rebuilt from your real folders at every session start (and with `/context-keeper:map`), including folders you create by hand.
 - **Feeding rules**: the AI records decisions, project state, discoveries and your preferences without you having to ask.
 - **Automation** (Claude Code): context is reloaded right after every compaction, and the AI is reminded to run a *checkpoint* when the conversation gets long.
 
@@ -24,8 +25,8 @@ You don't need it. The AI reads and writes the files straight from disk and does
       every session              when a subject comes up          only when needed
  +------------------------+    +-------------------------+    +-----------------------+
  | HOT   (~2k tokens)     | -> | WARM                    | -> | COLD                  |
- | BRAIN.md  rules        |    | Projects/X/Index.md     |    | Decisions/, Research/ |
- | NOW.md    state        |    | "Current state"         |    | Journal/, Archive/    |
+ | CLAUDE.md  rules + map |    | Projects/X/Index.md     |    | Decisions/, Research/ |
+ | (neutral)              |    | "Current state"         |    | Journal/, NOW.md      |
  +------------------------+    +-------------------------+    +-----------------------+
             ^                                                              |
             +--------------- checkpoint: the AI updates the notes <--------+
@@ -46,7 +47,7 @@ You don't need it. The AI reads and writes the files straight from disk and does
 /plugin install context-keeper@context-keeper
 ```
 
-The plugin ships the skill, the `/context-keeper:checkpoint` and `/context-keeper:review` commands and the automation hooks. The hooks stay inactive until you create your brain.
+The plugin ships the skill, the `/context-keeper:checkpoint`, `/context-keeper:map` and `/context-keeper:review` commands and the automation hooks. The hooks stay inactive until you create your brain.
 
 On Windows, install Claude Code with the official installer to get the `claude` command in your terminal. The executable bundled inside the Claude desktop app lives in a virtualized folder and does not work as a regular terminal command.
 
@@ -63,17 +64,17 @@ In a conversation, say something like:
 - *"Import my Obsidian vault into the brain."*
 - *"Review my second brain."*
 
-The skill works in English and Portuguese. Brains in Portuguese use Portuguese file names (`CEREBRO.md`, `AGORA.md`, `Diario/`).
+The skill works in English and Portuguese. Brains in Portuguese use Portuguese file names (`AGORA.md`, `Diario/`, `Projetos/`); the root is `CLAUDE.md` in every language.
 
 ## What gets created
 
 ```
 SecondBrain/
-├── CLAUDE.md         one line that loads BRAIN.md in Claude Code
-├── BRAIN.md          rules, map and feeding protocol
-├── NOW.md            current focus, open items, latest decisions
+├── CLAUDE.md         rules, navigation and the map of every folder (neutral, loaded every session)
+├── NOW.md            current focus, open items, latest decisions (read on demand)
 ├── Profile/          who you are and how you like the AI to work
-├── Projects/         Projects-Map.md + one folder per project, with its files and its context
+├── University/, Work/, ...   one folder per area of your life, each with its Index.md
+├── Projects/         one folder per project, with its files and its context
 ├── Inbox/            quick captures
 ├── Journal/          one entry per relevant session
 ├── Templates/        note templates
@@ -100,9 +101,9 @@ skills/context-keeper/
 ├── references/              interview, architectures, integrations, feeding protocol, importing, maintenance
 ├── assets/templates/        brain files, in pt-BR/ and en/
 ├── assets/hooks/            hooks for standalone installs
-└── scripts/                 lib.sh, session-start.sh, checkpoint-stop.sh, brain-lint.sh
+└── scripts/                 lib.sh, update-map.sh, session-start.sh, checkpoint-stop.sh, brain-lint.sh
 hooks/hooks.json             plugin hooks (SessionStart and Stop)
-commands/                    /context-keeper:checkpoint and /context-keeper:review
+commands/                    /context-keeper:checkpoint, :map and :review
 tests/skill-evals.json       test scenarios for the skill
 tests/make-personas.sh       fictional test users, each with a simulated home folder
 ```

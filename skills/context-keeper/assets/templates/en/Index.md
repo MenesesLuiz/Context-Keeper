@@ -1,6 +1,7 @@
 ---
 type: project
 status: idea
+description: {{WHAT_THIS_FOLDER_IS_IN_ONE_NEUTRAL_LINE}}
 created: {{DATE}}
 updated: {{DATE}}
 tags: []

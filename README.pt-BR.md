@@ -8,7 +8,8 @@ Toda IA esquece. Depois de muitas mensagens, o contexto é compactado e os detal
 
 O Context Keeper resolve isso. Ele entrevista você, propõe um plano (**você escolhe**) e monta:
 
-- **Um ponto de entrada** que a IA carrega em toda sessão, em qualquer pasta.
+- **Um ponto de entrada** que a IA carrega em toda sessão: um `CLAUDE.md` neutro com as regras e o **mapa de todas as pastas**, para a IA ir direto ao projeto certo em vez de gastar tokens procurando no seu disco.
+- **Um mapa que não desatualiza**: reconstruído a partir das suas pastas reais a cada início de sessão (e com `/context-keeper:map`), inclusive as pastas que você cria à mão.
 - **Regras de alimentação**: a IA registra decisões, estado dos projetos, descobertas e as suas preferências sem você precisar pedir.
 - **Automação** (Claude Code): o contexto é recarregado logo após cada compactação, e a IA é lembrada de fazer um *checkpoint* quando a conversa fica longa.
 
@@ -24,8 +25,8 @@ Não é necessário. A IA lê e escreve os arquivos direto do disco e não abre 
        toda sessão              ao entrar num assunto          só quando precisa
  +------------------------+    +-------------------------+    +-----------------------+
  | QUENTE  (~2k tokens)   | -> | MORNA                   | -> | FRIA                  |
- | CEREBRO.md  regras     |    | Projetos/X/Indice.md    |    | Decisoes/, Pesquisa/  |
- | AGORA.md    estado     |    | "Estado atual"          |    | Diario/, Arquivo/     |
+ | CLAUDE.md regras+mapa  |    | Projetos/X/Indice.md    |    | Decisoes/, Pesquisa/  |
+ | (neutro)               |    | "Estado atual"          |    | Diario/, AGORA.md     |
  +------------------------+    +-------------------------+    +-----------------------+
             ^                                                              |
             +--------------- checkpoint: a IA atualiza as notas <----------+
@@ -46,7 +47,7 @@ Não é necessário. A IA lê e escreve os arquivos direto do disco e não abre 
 /plugin install context-keeper@context-keeper
 ```
 
-O plugin traz a skill, os atalhos `/context-keeper:checkpoint` e `/context-keeper:review` e os hooks de automação. Os hooks ficam inativos até você criar o seu cérebro.
+O plugin traz a skill, os atalhos `/context-keeper:checkpoint`, `/context-keeper:map` e `/context-keeper:review` e os hooks de automação. Os hooks ficam inativos até você criar o seu cérebro.
 
 No Windows, instale o Claude Code pelo instalador oficial para ter o comando `claude` no terminal. O executável que vem dentro do app de desktop do Claude fica numa pasta virtualizada e não funciona como comando comum no terminal.
 
@@ -69,11 +70,11 @@ A entrevista acontece em português, e o cérebro é criado com nomes em portugu
 
 ```
 SegundoCerebro/
-├── CLAUDE.md         uma linha que carrega o CEREBRO.md no Claude Code
-├── CEREBRO.md        regras, mapa e protocolo de alimentação
-├── AGORA.md          foco atual, pendências, últimas decisões
+├── CLAUDE.md         regras, navegação e o mapa de todas as pastas (neutro, carregado em toda sessão)
+├── AGORA.md          foco atual, pendências, últimas decisões (lido sob demanda)
 ├── Perfil/           quem você é e como gosta que a IA trabalhe
-├── Projetos/         Mapa-de-Projetos.md + uma pasta por projeto, com os arquivos e o contexto dele
+├── Faculdade/, Trabalho/, ...   uma pasta por área da sua vida, cada uma com o seu Indice.md
+├── Projetos/         uma pasta por projeto, com os arquivos e o contexto dele
 ├── Inbox/            capturas rápidas
 ├── Diario/           uma entrada por sessão relevante
 ├── Templates/        modelos de nota

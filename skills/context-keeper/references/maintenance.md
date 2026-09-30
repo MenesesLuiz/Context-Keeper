@@ -9,7 +9,8 @@ bash scripts/brain-lint.sh [brain] [days-until-stale]
 ```
 
 Without a path, it uses the pointer `~/.context-keeper/config`. It reports:
-- a root file or now file larger than recommended (they cost tokens in every session);
+- a root file or now file larger than recommended (the root costs tokens in every session);
+- a map in `CLAUDE.md` that no longer matches the real folders, or folders without a description (fix with `update-map.sh` / Mode 5);
 - notes without frontmatter;
 - notes whose `updated:`/`atualizado:` date is old (default: 60 days);
 - Inbox items older than 14 days;
