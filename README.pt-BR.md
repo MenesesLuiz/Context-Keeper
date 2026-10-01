@@ -53,6 +53,19 @@ Não é necessário. A IA lê e escreve os arquivos direto do disco e não abre 
 
 O plugin traz a skill, os atalhos `/context-keeper:checkpoint`, `/context-keeper:map` e `/context-keeper:review` e os hooks de automação. Os hooks ficam inativos até você criar o seu cérebro.
 
+### Como atualizar
+
+O Claude Code não atualiza sozinho plugins de marketplaces de terceiros. Ligue a atualização automática uma vez:
+
+- **Recomendado:** deixe a skill fazer isso. Ao montar o seu cérebro, ela oferece ligar a atualização automática deste plugin: acrescenta `"autoUpdate": true` ao marketplace `context-keeper` em `~/.claude/settings.json`, com backup.
+- **À mão:** em `/plugin` > **Marketplaces**, selecione `context-keeper` e escolha **Enable auto-update**. O botão ao lado do plugin, na lista de plugins, só liga e desliga o plugin; não é a atualização automática.
+
+Com ela ligada, as versões novas chegam alguns minutos depois da primeira mensagem de uma sessão (só reiniciar o app não dispara a atualização) e são carregadas na sessão seguinte. Para atualizar na hora, rode `claude plugin marketplace update context-keeper` e abra uma sessão nova. Se a versão ainda não mudar, renove a cópia do marketplace direto:
+
+```bash
+git -C ~/.claude/plugins/marketplaces/context-keeper pull
+```
+
 **Claude Code (como skill avulsa).** Copie `skills/context-keeper/` para `~/.claude/skills/`. Tudo funciona, mas a automação do nível 3 exige que a skill edite o seu `~/.claude/settings.json` (com backup).
 
 **Claude.ai / Claude Desktop.** Compacte a pasta `skills/context-keeper/` em `.zip` e envie em *Configurações → Capacidades → Skills*. Esses apps não têm hooks, então o cérebro funciona até o nível 2.

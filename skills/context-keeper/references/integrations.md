@@ -44,6 +44,19 @@ Level 3 always includes level 2: set up the global import above first. Then make
 
 The hooks run with `bash`: on macOS and Linux it is built in; on Windows it is the Git Bash from Git for Windows, a prerequisite of this skill.
 
+**Turn on auto-update for this plugin (recommended, with consent).** Marketplaces from third parties do not update on their own: without this, the user keeps the version they installed and never receives fixes. Propose it in the plan as a change outside the brain, then, after approval and a backup of `~/.claude/settings.json`:
+- if `extraKnownMarketplaces` already has a `context-keeper` entry (Claude Code writes one when the marketplace is added), add `"autoUpdate": true` to it;
+- otherwise add the entry:
+  ```json
+  "extraKnownMarketplaces": {
+    "context-keeper": {
+      "source": { "source": "git", "url": "https://github.com/MenesesLuiz/Context-Keeper.git" },
+      "autoUpdate": true
+    }
+  }
+  ```
+Keep every other key in the file untouched. Tell the user that updates arrive a few minutes after the first message of a session, and that they can force one with `claude plugin marketplace update context-keeper`.
+
 **As a standalone skill.**
 1. Copy the skill's `scripts/*.sh` (including `lib.sh`) to `<BRAIN>/.context-keeper/scripts/`.
 2. Merge `assets/hooks/claude-settings.json` into `~/.claude/settings.json`, replacing `<BRAIN>` with the real path. If hooks already exist for the same events, **append** entries to the array instead of replacing it.

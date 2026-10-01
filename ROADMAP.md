@@ -1,6 +1,6 @@
 # Roadmap
 
-Current version: **0.3.1** (in development; 0.2.0 is the latest release)
+Current version: **0.3.2** (in development; 0.2.0 is the latest release)
 
 ## Decisions (2026-09-25)
 

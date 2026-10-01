@@ -53,6 +53,19 @@ You don't need it. The AI reads and writes the files straight from disk and does
 
 The plugin ships the skill, the `/context-keeper:checkpoint`, `/context-keeper:map` and `/context-keeper:review` commands and the automation hooks. The hooks stay inactive until you create your brain.
 
+### Updating
+
+Claude Code does not update plugins from third-party marketplaces on its own, so turn on auto-update once:
+
+- **Recommended:** let the skill do it. When it sets up your brain, it offers to turn on auto-update for this plugin (it adds `"autoUpdate": true` to the `context-keeper` marketplace in `~/.claude/settings.json`, with a backup).
+- **By hand:** in `/plugin` > **Marketplaces**, select `context-keeper` and choose **Enable auto-update**. The switch next to the plugin in the plugin list only turns the plugin on or off; it is not auto-update.
+
+With auto-update on, new versions arrive a few minutes after the first message of a session (restarting the app alone does not trigger it), and load in the next session. To update right away, run `claude plugin marketplace update context-keeper` and start a new session. If the version still does not change, refresh the marketplace copy directly:
+
+```bash
+git -C ~/.claude/plugins/marketplaces/context-keeper pull
+```
+
 **Claude Code (as a standalone skill).** Copy `skills/context-keeper/` into `~/.claude/skills/`. Everything works, but level 3 automation requires the skill to edit your `~/.claude/settings.json` (with a backup).
 
 **Claude.ai / Claude Desktop.** Zip the `skills/context-keeper/` folder and upload it under *Settings → Capabilities → Skills*. These apps have no hooks, so the brain works up to level 2.

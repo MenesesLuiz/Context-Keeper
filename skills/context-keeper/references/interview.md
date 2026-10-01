@@ -133,6 +133,7 @@ Present the plan in the conversation with this format, translated to the user's 
 
 ## 5. What will change outside the brain
 - `~/.context-keeper/config` — pointer to the brain (new file)
+- `~/.claude/settings.json` — turns on auto-update for the context-keeper plugin, so fixes reach you (backup at `settings.json.bak-YYYY-MM-DD`; only if installed as a plugin)
 - `<file>` — <what changes> (backup at `<file>.bak-YYYY-MM-DD`)
 
 ## 6. Your projects (recommendation — you move them, I don't)

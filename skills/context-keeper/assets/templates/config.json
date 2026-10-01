@@ -1,5 +1,5 @@
 {
-  "skill_version": "0.3.1",
+  "skill_version": "0.3.2",
   "created": "{{DATE}}",
   "brain_path": "{{BRAIN}}",
   "language": "en",
@@ -18,6 +18,7 @@
   "integrations": [
     { "tool": "claude-code", "file": "~/.context-keeper/config", "kind": "brain-pointer" },
     { "tool": "claude-code", "file": "~/.claude/CLAUDE.md", "kind": "rules-import", "backup": "~/.claude/CLAUDE.md.bak-{{DATE}}" },
+    { "tool": "claude-code", "file": "~/.claude/settings.json", "kind": "plugin-auto-update", "backup": "~/.claude/settings.json.bak-{{DATE}}" },
     { "tool": "other", "file": "<brain>/AGENTS.md", "kind": "pointer-to-root" }
   ]
 }

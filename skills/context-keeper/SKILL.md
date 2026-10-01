@@ -71,7 +71,7 @@ Six steps. Never skip step 3: the plan approval is what keeps the user in charge
    2. **Core files** from the language's template set: the root `CLAUDE.md` (with the map markers), the now file, the profile and preferences notes from the interview answers, the note templates copied into `Templates/`, and `.context-keeper/config.json` from `assets/templates/config.json`. Keep `CLAUDE.md` under ~150 lines: it loads every session, and Claude Code loads it in any folder inside the brain. If the user also uses other AIs, add a one-line `AGENTS.md` telling them to read `CLAUDE.md` first. In adopt mode, keep the user's root file and propose adding the map markers to it.
    3. **Map**: run the map script (see *Running the scripts* below) to fill the map. Every area and project folder gets an index note with a one-line, neutral `descricao:`/`description:`.
    4. **Pointer**: write `~/.context-keeper/config` with the line `brain_path=<brain path, forward slashes>`. The hooks and the checker find the brain through it. If it already points elsewhere, ask before replacing it.
-   5. **Integrations** for the chosen level: follow `references/integrations.md`.
+   5. **Integrations** for the chosen level: follow `references/integrations.md`. If the skill came as the plugin, this includes turning on auto-update for its marketplace, so the user receives fixes.
    6. **Git** (if chosen): `git init`, `.gitignore` with `.context-keeper/state/` and with any project folder that is its own git repository, first commit. For a remote, recommend a **private** repository. In adopt mode, always ask before creating a repository in the user's existing folder.
 
 5. **Seed.** An empty brain helps nobody:

@@ -2,6 +2,12 @@
 
 All notable changes to this project are documented here. Dates use `YYYY-MM-DD`.
 
+## [0.3.2] — unreleased
+
+### Added
+- During setup, the skill offers to turn on auto-update for this plugin's marketplace (adds `"autoUpdate": true` to the `context-keeper` entry in `~/.claude/settings.json`, with consent and a backup). Third-party marketplaces do not update on their own, so without it users never receive fixes.
+- An "Updating" section in both READMEs: how auto-update works, how to force an update, and a fallback that refreshes the marketplace copy with `git pull`.
+
 ## [0.3.1] — unreleased
 
 The changes in this section were first distributed as 0.3.0, an intermediate development build that reached the marketplace without a release; installs that have it get this version after `/plugin marketplace update context-keeper`.
