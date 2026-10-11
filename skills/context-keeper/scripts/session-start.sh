@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 # Claude Code SessionStart hook. Whatever it prints enters the AI's context.
 #
+#   - Every time, when sync is on: pulls changes made on another machine (sync.sh) and reports
+#     them, or a pending sync failure, to the AI.
 #   - Every time: brings the map in the root file (CLAUDE.md) up to date with the real folders.
 #     If the map changed, it prints the new map, because Claude Code may have loaded the old
 #     root file already.
@@ -24,12 +26,26 @@ MAX_BYTES="${CONTEXT_KEEPER_MAX_BYTES:-8000}"
 input="$(cat 2>/dev/null || true)"
 source_event="$(printf '%s' "$input" | sed -n 's/.*"source"[[:space:]]*:[[:space:]]*"\([a-z]*\)".*/\1/p' | head -n1)"
 
+# Bring changes made on another machine first (only when sync is on; offline is skipped quietly).
+sync_report=""
+if ck_sync_enabled; then
+  sync_report="$(CONTEXT_KEEPER_SYNC_SOFT=1 bash "$(dirname "$0")/sync.sh" "$BRAIN" pull 2>/dev/null)"
+fi
+sync_failed="$(head -n1 "$BRAIN/.context-keeper/state/sync.failed" 2>/dev/null)"
+
 map_report="$(bash "$(dirname "$0")/update-map.sh" "$BRAIN" 2>/dev/null)"
 
 {
+  titled=0
+  title_once() { [ "$titled" = 1 ] || { ck_msg title "$BRAIN"; echo; titled=1; }; }
+
+  pulled="$(printf '%s\n' "$sync_report" | sed -n 's/^sync: pulled: //p')"
+  if [ -n "$pulled" ]; then title_once; ck_msg synced "$pulled"; echo; echo; fi
+  if [ -n "$sync_failed" ]; then title_once; ck_msg syncfail "$sync_failed"; echo; echo; fi
+
   case "$map_report" in
     *"map: updated"*)
-      ck_msg title "$BRAIN"; echo
+      title_once
       ck_msg map "$ROOT_FILE"; echo
       tr -d '\r' < "$BRAIN/$ROOT_FILE" | awk '/<!-- context-keeper:map:start -->/{on=1; next} /<!-- context-keeper:map:end -->/{on=0} on'
       missing="$(printf '%s\n' "$map_report" | sed -n 's/^map: without description://p')"
@@ -39,7 +55,7 @@ map_report="$(bash "$(dirname "$0")/update-map.sh" "$BRAIN" 2>/dev/null)"
   esac
 
   if [ "$source_event" = "compact" ]; then
-    case "$map_report" in *"map: updated"*) ;; *) ck_msg title "$BRAIN"; echo ;; esac
+    title_once
     if [ -n "$NOW_FILE" ]; then
       ck_msg compacted "$NOW_FILE"; echo
     fi

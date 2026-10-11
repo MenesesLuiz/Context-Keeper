@@ -94,6 +94,7 @@ Use it only when the user asks for it, or when their answers show needs the defa
 | New folders | Propose first |
 | Conduct | Plan and ask for approval on big tasks; do small ones directly |
 | Git | Yes for technical users creating a new brain; no for the others. In adopt mode, always ask |
+| Sync with GitHub | Offered in the plan; recommended only for people who use more than one computer |
 | Location | `~/SecondBrain` (pt-BR: `~/SegundoCerebro`; Windows: under `%USERPROFILE%`) |
 
 ---
@@ -127,6 +128,11 @@ Present the plan in the conversation with this format, translated to the user's 
 | 1 Manual | ... | only the brain folder |
 | 2 Connected | ... | <exact files> |
 | 3 Automatic (recommended) | ... | <exact files> |
+
+**Keep the brain on GitHub?** (backup, and the same brain on every computer you use; the notes go to a **private** repository on GitHub, a third party)
+- No, only on this computer
+- Yes, the skill creates the repository with the GitHub CLI (`gh`; needs it installed and signed in)
+- Yes, I create an empty private repository on github.com and paste its address
 
 ## 4. What will be created in `<path>`
 - <root file>, <now file>, Profile/..., <subjects>/Index.md, ...

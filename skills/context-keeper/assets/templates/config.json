@@ -1,6 +1,7 @@
 {
-  "skill_version": "0.3.2",
+  "skill_version": "0.4.0",
   "created": "{{DATE}}",
+  "name": "{{BRAIN_FOLDER_NAME}}",
   "brain_path": "{{BRAIN}}",
   "language": "en",
   "structure": "by-subject",
@@ -10,6 +11,7 @@
   "install_mode": "plugin",
   "write_autonomy": "write-and-tell",
   "git": false,
+  "sync": { "enabled": false, "method": "none", "remote": "" },
   "files": {
     "root": "CLAUDE.md",
     "now": "NOW.md",

@@ -1,6 +1,6 @@
 # Roadmap
 
-Current version: **0.3.2** (in development; 0.2.0 is the latest release)
+Current version: **0.4.0** (in development; 0.2.0 is the latest release)
 
 ## Decisions (2026-09-25)
 
@@ -24,6 +24,11 @@ Current version: **0.3.2** (in development; 0.2.0 is the latest release)
   - [x] projects organized inside the brain (advice only: the AI recommends, the user moves).
   - [x] tune the checkpoint trigger with real transcripts: bytes were a poor proxy (a 16x byte growth for a 2x context growth), so the trigger now measures context tokens from the transcript's `usage` (default: 50,000 tokens of growth, `CONTEXT_KEEPER_CHECKPOINT_TOKENS`).
 - [ ] **Phase 5 — Release:** GitHub description and topics, tag `v0.2.0`, clean install from the marketplace, optional submission to Anthropic's community marketplace.
+
+## Next
+
+- [x] 0.4.0: sync the brain with a private GitHub repository (pull at session start, push after checkpoints, `/context-keeper:sync`).
+- [ ] 0.5.0: environment memory. Each machine records in the brain which skills and plugins it has, so the AI knows what exists on the other machine and proposes installing what is missing.
 
 ## Later (0.3+)
 

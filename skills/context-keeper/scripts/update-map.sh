@@ -84,11 +84,16 @@ folder_desc() {
 
 # Subfolders of a folder (relative path, "" for the brain root), sorted, skipping hidden,
 # dependency and build folders.
+#
+# With sync on, empty folders are left out: git does not carry them to the other machines, so
+# listing them would make each machine write a different map. They appear once they hold a file.
+sync_on=0; ck_sync_enabled && sync_on=1
 subdirs() {
   for d in "$BRAIN/${1:+$1/}"*/; do
     [ -d "$d" ] || continue
     n="$(basename "$d")"
     case "$n" in node_modules|venv|dist|build|vendor|target|__pycache__) continue ;; esac
+    if [ "$sync_on" = 1 ] && [ -z "$(find "$d" -type f -print -quit 2>/dev/null)" ]; then continue; fi
     printf '%s\n' "$n"
   done | sort
 }
@@ -138,7 +143,11 @@ width=0
 for l in "${labels[@]}"; do
   n="$(cols "$l")"; [ "$n" -gt "$width" ] && width=$n
 done
-block="$START"$'\n''```'$'\n'"$(basename "$BRAIN")/"
+# The top line uses the brain's name from config.json ("name"), so every synced machine writes the
+# same map even if the folder has another name there; the folder name is only a fallback.
+brain_name="$(ck_json_value "$BRAIN/.context-keeper/config.json" name)"
+[ -n "$brain_name" ] || brain_name="$(basename "$BRAIN")"
+block="$START"$'\n''```'$'\n'"$brain_name/"
 for k in "${!labels[@]}"; do
   spaces="$(printf '%*s' $(( width - $(cols "${labels[$k]}") + 2 )) '')"
   block="$block"$'\n'"${labels[$k]}$spaces← ${descs[$k]}"

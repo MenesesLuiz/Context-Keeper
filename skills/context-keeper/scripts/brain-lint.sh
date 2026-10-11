@@ -141,7 +141,7 @@ fi
 section "Possible secrets"
 grep -rnIE --include='*.md' \
   --exclude-dir=.git --exclude-dir=.obsidian --exclude-dir=.context-keeper --exclude-dir=node_modules \
-  '((api[_-]?key|secret|senha|password|passwd|token)[[:space:]]*[:=][[:space:]]*[^[:space:]{}]{8,})|(sk-[A-Za-z0-9_-]{20,})|(ghp_[A-Za-z0-9]{20,})|(AKIA[0-9A-Z]{16})' \
+  "$CK_SECRET_RE" \
   . 2>/dev/null | cut -d: -f1,2 | while IFS= read -r hit; do
     echo "- Check: ${hit#./}"
   done

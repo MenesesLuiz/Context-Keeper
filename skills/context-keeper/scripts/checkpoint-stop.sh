@@ -15,7 +15,8 @@
 #   - if the now file (NOW.md/AGORA.md) changed after that, assumes a checkpoint happened and
 #     only moves the baseline; after a compaction the context shrinks and the baseline follows;
 #   - if the context grew more than the limit, asks for a checkpoint once;
-#   - never asks twice in a row (stop_hook_active), so it cannot loop.
+#   - never asks twice in a row (stop_hook_active), so it cannot loop;
+#   - after a checkpoint, when sync is on, pushes the brain to GitHub (sync.sh push).
 
 set -u
 . "$(dirname "$0")/lib.sh"
@@ -53,8 +54,17 @@ mkdir -p "$state_dir" 2>/dev/null || exit 0
 baseline_file="$state_dir/$session.checkpoint"
 
 # First stop of the session, or a checkpoint happened since last time: only record the baseline.
-if [ ! -f "$baseline_file" ] || { [ -n "$NOW_FILE" ] && [ "$BRAIN/$NOW_FILE" -nt "$baseline_file" ]; }; then
+# First stop of the session: only record the baseline.
+if [ ! -f "$baseline_file" ]; then
   echo "$size" > "$baseline_file"
+  exit 0
+fi
+
+# A checkpoint happened since last time (the now file changed): move the baseline and, when sync
+# is on, push the brain to GitHub. Failures are logged and reported at the next session start.
+if [ -n "$NOW_FILE" ] && [ "$BRAIN/$NOW_FILE" -nt "$baseline_file" ]; then
+  echo "$size" > "$baseline_file"
+  ck_sync_enabled && bash "$(dirname "$0")/sync.sh" "$BRAIN" push >/dev/null 2>&1
   exit 0
 fi
 

@@ -74,6 +74,29 @@ File names and the hook messages' language come from `.context-keeper/config.jso
 
 ---
 
+## Sync with GitHub (optional)
+
+Keeps one brain on several computers, with a backup and full history, through a **private** GitHub repository. Tell the user plainly that their notes will be stored on GitHub.
+
+**How it runs once set up** (`scripts/sync.sh`, no AI and no tokens):
+- at session start, the start hook pulls changes made on another machine and tells the AI which files changed; offline, it skips quietly;
+- after each checkpoint, the Stop hook pushes: it checks the changed notes for secrets, commits, pulls and pushes;
+- `/context-keeper:sync` does the same on demand;
+- it never waits for a password, never resolves a conflict on its own (it undoes the attempt and reports it) and never pushes a note with a possible secret. Failures are logged in `.context-keeper/state/sync.log` and reported at the next session start.
+
+**Setup, after the user approves it in the plan:**
+1. Git repository: `git init -b main` if the brain is not one yet. Check `git config user.name` and `user.email`; if they are empty, ask the user what to use and set them for this repository.
+2. `.gitignore`: `.context-keeper/state/`, plus every folder inside the brain that is its own git repository (code projects sync through their own remotes).
+3. `.context-keeper/config.json`: set `"name"` to the brain folder's name (the map uses it, so every machine writes the same map) and `"sync": { "enabled": true, "method": "gh" | "web", "remote": "<owner>/<repo>" }`.
+4. Create the repository, as the user chose:
+   - **GitHub CLI:** `gh auth status`; if they are not signed in, ask them to run `gh auth login` themselves. Then `gh repo create <name> --private --source "<BRAIN>" --remote origin --push`.
+   - **Web:** ask them to create an **empty, private** repository at github.com/new (no README) and paste its address. Then `git -C "<BRAIN>" remote add origin <address>` and `bash scripts/sync.sh "<BRAIN>" visibility`; if it says the repository is public, stop and ask them to make it private first.
+5. First push with plain git, so the credential manager can ask the user to sign in once: `git -C "<BRAIN>" add -A && git -C "<BRAIN>" commit -m "context-keeper: first sync" && git -C "<BRAIN>" push -u origin main`. From then on `sync.sh` runs without prompts.
+
+**On another computer:** clone the repository where the user wants the brain (`git clone <address> <folder>`), install the plugin, then run the skill there. It finds the brain created by this skill (it has `.context-keeper/config.json`) and only sets up that machine: the pointer, auto-update and, if wanted, the global import. `brain_path` in `config.json` describes the first machine; each machine finds its own copy through its pointer.
+
+**Good to know:** git does not carry empty folders, so with sync on the map lists a folder once it holds a file (usually its `Index.md`). On a conflict, show the user both versions and let them choose.
+
 ## Claude Desktop (chat app) and claude.ai
 
 - **Claude Desktop** (menus checked on 2026-09-30):

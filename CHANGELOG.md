@@ -2,6 +2,18 @@
 
 All notable changes to this project are documented here. Dates use `YYYY-MM-DD`.
 
+## [0.4.0] — unreleased
+
+### Added
+- **Sync with GitHub (optional).** During setup the skill offers to keep the brain in a private GitHub repository, created with the GitHub CLI or on the web. `scripts/sync.sh` pulls at session start (offline is skipped quietly), pushes after each checkpoint, and runs on demand with `/context-keeper:sync`. It never waits for a password, never resolves a conflict on its own and blocks any push with a possible secret. Failures are logged and reported to the AI at the next session start.
+- The start hook tells the AI which notes changed on another machine.
+- `sync.sh visibility` warns when the GitHub repository is public.
+
+### Changed
+- The map's top line uses the brain's `name` from `config.json`, so every synced machine writes the same map even if the folder has another name.
+- With sync on, the map lists a folder once it holds a file (git does not carry empty folders, and listing them would make each machine write a different map).
+- The secrets pattern lives in `lib.sh` and is shared by `brain-lint.sh` and `sync.sh`; it also catches `github_pat_` tokens.
+
 ## [0.3.2] — unreleased
 
 ### Added

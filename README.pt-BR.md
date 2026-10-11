@@ -51,7 +51,7 @@ Não é necessário. A IA lê e escreve os arquivos direto do disco e não abre 
 /plugin install context-keeper@context-keeper
 ```
 
-O plugin traz a skill, os atalhos `/context-keeper:checkpoint`, `/context-keeper:map` e `/context-keeper:review` e os hooks de automação. Os hooks ficam inativos até você criar o seu cérebro.
+O plugin traz a skill, os atalhos `/context-keeper:checkpoint`, `/context-keeper:map`, `/context-keeper:sync` e `/context-keeper:review` e os hooks de automação. Os hooks ficam inativos até você criar o seu cérebro.
 
 ### Como atualizar
 
@@ -96,6 +96,17 @@ SegundoCerebro/
 ├── Arquivo/          o que foi concluído (nada é apagado)
 └── .context-keeper/  configuração e estado dos hooks
 ```
+
+## Use o mesmo cérebro em vários computadores (opcional)
+
+Na criação, a skill pergunta se você quer guardar o cérebro num repositório **privado** do GitHub, criado pelo GitHub CLI ou pela web, como preferir. Com isso ligado:
+
+- cada sessão começa baixando o que você mudou no outro computador, e a IA fica sabendo quais notas mudaram;
+- cada checkpoint sobe as suas mudanças, depois de conferir que nenhuma nota tem um possível segredo;
+- `/context-keeper:sync` faz o mesmo quando você quiser;
+- conflitos nunca são resolvidos por você: a IA mostra as duas versões e você escolhe.
+
+As suas notas passam a ficar no GitHub, um terceiro, mesmo com o repositório privado. Em outro computador, clone o repositório, instale o plugin e rode a skill lá.
 
 ## Organize seus projetos dentro do cérebro
 

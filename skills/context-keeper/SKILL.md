@@ -39,6 +39,7 @@ When a case is not covered by the steps below, decide from these.
 | Bring in notes from Obsidian/Notion, documents, a repository or exported conversations | **3. Import** |
 | "Review/clean up my brain", stale notes, a messy brain, `/context-keeper:review` | **4. Review** |
 | "Update the map", new folders, the AI cannot find a project, `/context-keeper:map` | **5. Map** |
+| "Sync the brain", use it on another computer, keep it on GitHub, `/context-keeper:sync` | **6. Sync** |
 
 ---
 
@@ -72,7 +73,7 @@ Six steps. Never skip step 3: the plan approval is what keeps the user in charge
    3. **Map**: run the map script (see *Running the scripts* below) to fill the map. Every area and project folder gets an index note with a one-line, neutral `descricao:`/`description:`.
    4. **Pointer**: write `~/.context-keeper/config` with the line `brain_path=<brain path, forward slashes>`. The hooks and the checker find the brain through it. If it already points elsewhere, ask before replacing it.
    5. **Integrations** for the chosen level: follow `references/integrations.md`. If the skill came as the plugin, this includes turning on auto-update for its marketplace, so the user receives fixes.
-   6. **Git** (if chosen): `git init`, `.gitignore` with `.context-keeper/state/` and with any project folder that is its own git repository, first commit. For a remote, recommend a **private** repository. In adopt mode, always ask before creating a repository in the user's existing folder.
+   6. **Git and sync** (if chosen): `git init`, `.gitignore` with `.context-keeper/state/` and with any project folder that is its own git repository, first commit. In adopt mode, always ask before creating a repository in the user's existing folder. If the user chose to keep the brain on GitHub, follow `references/integrations.md` → "Sync with GitHub": a **private** repository, created with the GitHub CLI or on the web, as the user chose.
 
 5. **Seed.** An empty brain helps nobody:
    - an index note for each active subject the user mentioned, with "Current state" and "Where things are" (the real location of its files) filled in, and a one-line `description:` so it shows up in the map;
@@ -125,6 +126,14 @@ Also run it yourself, without being asked, right after creating a folder in the 
 
 ---
 
+## Mode 6 — Sync
+
+Keeps the brain the same on every computer through its private GitHub repository. It runs on its own (pull at session start, push after each checkpoint) and on demand:
+
+1. If sync is not set up, offer to set it up (`references/integrations.md` → "Sync with GitHub") and stop there.
+2. Run `bash scripts/sync.sh <brain> both`. It never waits for a password, never resolves a conflict on its own and never pushes a note with a possible secret.
+3. On a conflict, show the user both versions of each note and let them decide. On a blocked secret, show the file and line and wait for them to remove it. Then tell the user in 1–3 lines what happened.
+
 ## Running the scripts
 
 The scripts live in this skill's `scripts/` folder and run with `bash` (on Windows, the Git Bash that comes with Git for Windows, a prerequisite of this skill): `bash scripts/update-map.sh <brain>` (add `--check` to only report). Where there is no shell at all (Claude Desktop, other AIs), do the same work by hand, as described in Mode 5.
@@ -139,6 +148,7 @@ The scripts live in this skill's `scripts/` folder and run with `bash` (on Windo
 | `references/feeding-protocol.md` | Writing the root file's feeding rules, and Mode 2 |
 | `references/importing.md` | Mode 3 |
 | `references/maintenance.md` | Mode 4 |
+| `scripts/sync.sh` | Mode 6 and the hooks: pull, push (with the secrets check), visibility check of the GitHub repository |
 | `scripts/update-map.sh` | Mode 5, Setup step 4, and the start hook: rebuilds the map in `CLAUDE.md` from the real folders (`--check` only reports) |
 | `assets/templates/pt-BR/`, `assets/templates/en/` | Brain files per language |
 | `assets/templates/config.json` | The brain's `.context-keeper/config.json` |

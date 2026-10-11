@@ -60,6 +60,16 @@ ck_load_names() {
   fi
 }
 
+# Pattern for possible secrets in notes, shared by brain-lint.sh and sync.sh.
+CK_SECRET_RE='((api[_-]?key|secret|senha|password|passwd|token)[[:space:]]*[:=][[:space:]]*[^[:space:]{}]{8,})|(sk-[A-Za-z0-9_-]{20,})|(ghp_[A-Za-z0-9]{20,})|(github_pat_[A-Za-z0-9_]{20,})|(AKIA[0-9A-Z]{16})'
+
+# True when the brain's config turns sync on ("sync": { "enabled": true, ... }).
+ck_sync_enabled() {
+  cfg="$BRAIN/.context-keeper/config.json"
+  [ -f "$cfg" ] || return 1
+  tr -d '\r\n' < "$cfg" | grep -oE '"sync"[[:space:]]*:[[:space:]]*\{[^}]*\}' | grep -qE '"enabled"[[:space:]]*:[[:space:]]*true'
+}
+
 # Hook messages in the brain's language: ck_msg <key> [value for %s]
 ck_msg() {
   case "$BRAIN_LANG" in
@@ -71,6 +81,8 @@ ck_msg() {
         journal)    fmt='## Última entrada do diário (%s)' ;;
         map)        fmt='O mapa do cérebro (seção Atual do %s) foi atualizado com as pastas reais. Use-o para localizar áreas e projetos:' ;;
         nodesc)     fmt='Pastas sem descrição no mapa:%s. Quando o assunto surgir, proponha ao usuário uma descrição de uma linha (campo descricao: no Indice.md da pasta).' ;;
+        synced)     fmt='Mudanças baixadas do GitHub (feitas em outra máquina) nestes arquivos: %s' ;;
+        syncfail)   fmt='A sincronização do cérebro com o GitHub falhou: %s. Avise o usuário em uma linha e sugira /context-keeper:sync depois de resolver.' ;;
         checkpoint) fmt='Checkpoint do segundo cérebro: esta conversa cresceu bastante desde o último registro. Antes de encerrar, faça um checkpoint seguindo o protocolo de alimentação de %s (decisões, Estado atual dos assuntos tocados, arquivo de estado atual, preferências e uma entrada no diário). Se nada relevante aconteceu desde o último checkpoint, diga isso em uma linha e encerre.' ;;
       esac ;;
     *)
@@ -81,6 +93,8 @@ ck_msg() {
         journal)    fmt='## Latest journal entry (%s)' ;;
         map)        fmt="The brain's map (the current map section of %s) was updated from the real folders. Use it to find areas and projects:" ;;
         nodesc)     fmt='Folders without a description in the map:%s. When the subject comes up, propose a one-line description to the user (description: field in the folder index note).' ;;
+        synced)     fmt='Changes pulled from GitHub (made on another machine) in these files: %s' ;;
+        syncfail)   fmt='Syncing the brain with GitHub failed: %s. Tell the user in one line and suggest /context-keeper:sync once it is fixed.' ;;
         checkpoint) fmt='Second brain checkpoint: this conversation has grown a lot since the last save. Before finishing, run a checkpoint following the feeding protocol in %s (decisions, current state of the subjects touched, the current-state file, preferences and a journal entry). If nothing relevant happened since the last checkpoint, say so in one line and stop.' ;;
       esac ;;
   esac

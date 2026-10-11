@@ -51,7 +51,7 @@ You don't need it. The AI reads and writes the files straight from disk and does
 /plugin install context-keeper@context-keeper
 ```
 
-The plugin ships the skill, the `/context-keeper:checkpoint`, `/context-keeper:map` and `/context-keeper:review` commands and the automation hooks. The hooks stay inactive until you create your brain.
+The plugin ships the skill, the `/context-keeper:checkpoint`, `/context-keeper:map`, `/context-keeper:sync` and `/context-keeper:review` commands and the automation hooks. The hooks stay inactive until you create your brain.
 
 ### Updating
 
@@ -97,6 +97,17 @@ SecondBrain/
 └── .context-keeper/  config and hook state
 ```
 
+## Use the same brain on several computers (optional)
+
+During setup the skill asks whether to keep the brain in a **private** GitHub repository, created with the GitHub CLI or on the web, as you prefer. With it on:
+
+- each session starts by pulling what you changed on your other computer, and tells the AI which notes changed;
+- each checkpoint pushes your changes, after checking that no note contains a possible secret;
+- `/context-keeper:sync` does the same whenever you want;
+- conflicts are never resolved for you: the AI shows both versions and you choose.
+
+Your notes are then stored on GitHub, a third party, even though the repository is private. On another computer, clone the repository, install the plugin and run the skill there.
+
 ## Organize your projects inside the brain
 
 The brain works best as your workspace: each project in its own folder under `Projects/`, holding both the project's files (documents, code) and its context notes. The AI then has everything it needs in one place, and opening Claude Code inside any project folder loads the brain's rules automatically.
@@ -116,9 +127,9 @@ skills/context-keeper/
 ├── references/              interview, architectures, integrations, feeding protocol, importing, maintenance
 ├── assets/templates/        brain files, in pt-BR/ and en/
 ├── assets/hooks/            hooks for standalone installs
-└── scripts/                 lib.sh, update-map.sh, session-start.sh, checkpoint-stop.sh, brain-lint.sh
+└── scripts/                 lib.sh, update-map.sh, sync.sh, session-start.sh, checkpoint-stop.sh, brain-lint.sh
 hooks/hooks.json             plugin hooks (SessionStart and Stop)
-commands/                    /context-keeper:checkpoint, :map and :review
+commands/                    /context-keeper:checkpoint, :map, :sync and :review
 tests/skill-evals.json       test scenarios for the skill
 tests/make-personas.sh       fictional test users, each with a simulated home folder
 ```
